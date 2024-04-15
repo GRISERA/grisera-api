@@ -1,5 +1,6 @@
 # GRISERA API
-Graph Representation Integrating Signals for Emotion Recognition and Analysis (GRISERA) framework provides a persistent model for storing integrated signals and methods for its creation.
+Graph Representation Integrating Signals for Emotion Recognition and Analysis (GRISERA) framework provides a persistent model for storing integrated signals and methods for its creation. 
+This project is an api library of the Grisera project. It is added as an requirement to all implementations of Grisera backend service.
 
 To upload new versions:
 1. `python3 setup.py sdist bdist_wheel`
