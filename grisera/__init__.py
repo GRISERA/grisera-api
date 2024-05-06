@@ -14,7 +14,7 @@ from .arrangement.arrangement_model import *
 from .arrangement.arrangement_router import ArrangementRouter, router as arrangement_router
 from .arrangement.arrangement_service import ArrangementService
 
-from .channel.channel_model import *
+from .channel.channel_model import Type as ChannelType, ChannelIn, BasicChannelOut, ChannelOut, ChannelsOut
 from .channel.channel_router import ChannelRouter, router as channel_router
 from .channel.channel_service import ChannelService
 

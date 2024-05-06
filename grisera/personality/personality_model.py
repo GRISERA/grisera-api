@@ -6,12 +6,6 @@ from pydantic import BaseModel
 from grisera.models.base_model_out import BaseModelOut
 
 
-class FacialHair(str, Enum):
-    heavy = "Heavy"
-    some = "Some"
-    no = "No"
-
-
 class PersonalityBigFiveIn(BaseModel):
     """
     Model of personality big five model to acquire from client
