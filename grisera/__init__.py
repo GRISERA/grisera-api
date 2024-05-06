@@ -1,8 +1,8 @@
-from .activity.activity_model import * #Activity, ActivityPropertyIn, ActivityIn, BasicActivityOut, ActivityOut, ActivitiesOut
+from .activity.activity_model import *
 from .activity.activity_router import ActivityRouter, router as activity_router
 from .activity.activity_service import ActivityService
 
-from .activity_execution.activity_execution_model import * #ActivityExecutionPropertyIn, ActivityExecutionRelationIn, ActivityExecutionIn, BasicActivityExecutionOut, ActivityExecutionOut, ActivityExecutionsOut
+from .activity_execution.activity_execution_model import *
 from .activity_execution.activity_execution_router import ActivityExecutionRouter, router as activity_execution_router
 from .activity_execution.activity_execution_service import ActivityExecutionService
 
