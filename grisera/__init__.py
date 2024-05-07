@@ -18,6 +18,10 @@ from .channel.channel_model import Type as ChannelType, ChannelIn, BasicChannelO
 from .channel.channel_router import ChannelRouter, router as channel_router
 from .channel.channel_service import ChannelService
 
+from .dataset.dataset_model import *
+from .dataset.dataset_router import DatasetRouter, router as dataset_router
+from .dataset.dataset_service import DatasetService
+
 from .experiment.experiment_model import *
 from .experiment.experiment_router import ExperimentRouter, router as experiment_router
 from .experiment.experiment_service import ExperimentService
