@@ -6,7 +6,9 @@ from fastapi_utils.inferring_router import InferringRouter
 from starlette.requests import Request
 
 from grisera.helpers.hateoas import get_links
+from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
+from grisera.services.service_factory import ServiceFactory
 from grisera.time_series.time_series_model import (
     TimeSeriesIn,
     TimeSeriesNodesOut,
@@ -16,8 +18,6 @@ from grisera.time_series.time_series_model import (
     TimeSeriesTransformationIn,
     TimeSeriesMultidimensionalOut
 )
-from grisera.models.not_found_model import NotFoundByIdModel
-from grisera.services.service_factory import ServiceFactory
 
 router = InferringRouter()
 
@@ -55,7 +55,8 @@ class TimeSeriesRouter:
 
     @router.post("/time_series/transformation", tags=["time series"],
                  response_model=Union[TimeSeriesOut, NotFoundByIdModel])
-    async def transform_time_series(self, time_series_transformation: TimeSeriesTransformationIn, response: Response, dataset_name: str):
+    async def transform_time_series(self, time_series_transformation: TimeSeriesTransformationIn, response: Response,
+                                    dataset_name: str):
         """
         Create new transformed time series in database
 
@@ -128,9 +129,9 @@ class TimeSeriesRouter:
         response_model=Union[TimeSeriesOut, NotFoundByIdModel],
     )
     async def get_time_series(
-        self, time_series_id: Union[int, str], depth: int, response: Response, dataset_name: str,
-        signal_min_value: Optional[int] = None,
-        signal_max_value: Optional[int] = None
+            self, time_series_id: Union[int, str], depth: int, response: Response, dataset_name: str,
+            signal_min_value: Optional[int] = None,
+            signal_max_value: Optional[int] = None
     ):
         """
         Get time series by id from database with signal values. Depth attribute specifies how many models will be traversed to create the
@@ -139,7 +140,8 @@ class TimeSeriesRouter:
         Signal values will be filtered using minimum and maximum value if present.
         """
 
-        get_response = self.time_series_service.get_time_series(time_series_id, dataset_name, depth, signal_min_value, signal_max_value)
+        get_response = self.time_series_service.get_time_series(time_series_id, dataset_name, depth, signal_min_value,
+                                                                signal_max_value)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -177,7 +179,7 @@ class TimeSeriesRouter:
         response_model=Union[TimeSeriesOut, NotFoundByIdModel],
     )
     async def delete_time_series(
-        self, time_series_id: Union[int, str], response: Response,dataset_name
+            self, time_series_id: Union[int, str], response: Response, dataset_name
     ):
         """
         Delete time series by id from database with all signal values.
@@ -197,10 +199,10 @@ class TimeSeriesRouter:
         response_model=Union[TimeSeriesOut, NotFoundByIdModel],
     )
     async def update_time_series(
-        self,
-        time_series_id: Union[int, str],
-        time_series: TimeSeriesPropertyIn,
-        response: Response, dataset_name: str
+            self,
+            time_series_id: Union[int, str],
+            time_series: TimeSeriesPropertyIn,
+            response: Response, dataset_name: str
     ):
         """
         Update time series model in database
@@ -222,10 +224,10 @@ class TimeSeriesRouter:
         response_model=Union[TimeSeriesOut, NotFoundByIdModel],
     )
     async def update_time_series_relationships(
-        self,
-        time_series_id: Union[int, str],
-        time_series: TimeSeriesRelationIn,
-        response: Response, dataset_name: str
+            self,
+            time_series_id: Union[int, str],
+            time_series: TimeSeriesRelationIn,
+            response: Response, dataset_name: str
     ):
         """
         Update time series relations in database

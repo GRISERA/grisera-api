@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.recording.recording_model import (
@@ -57,14 +58,13 @@ class RecordingRouter:
 
         return get_response
 
-
     @router.get(
         "/recordings/{recording_id}",
         tags=["recordings"],
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
     async def get_recording(
-        self, recording_id: Union[int, str], response: Response, dataset_name: str, depth: int=0
+            self, recording_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
         """
         Get recordings from database. Depth attribute specifies how many models will be traversed to create the
@@ -99,23 +99,22 @@ class RecordingRouter:
 
         return get_response
 
-
     @router.put(
         "/recordings/{recording_id}",
         tags=["recordings"],
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
     async def update_recording(
-        self,
-        recording_id: Union[int, str],
-        recording: RecordingPropertyIn,
-        response: Response, dataset_name: str
+            self,
+            recording_id: Union[int, str],
+            recording: RecordingPropertyIn,
+            response: Response, dataset_name: str
     ):
         """
         Update recording model in database
         """
         update_response = self.recording_service.update_recording(
-            recording_id, recording,dataset_name
+            recording_id, recording, dataset_name
         )
 
         if update_response.errors is not None:
@@ -132,16 +131,16 @@ class RecordingRouter:
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
     async def update_recording_relationships(
-        self,
-        recording_id: Union[int, str],
-        recording: RecordingRelationIn,
-        response: Response, dataset_name: str
+            self,
+            recording_id: Union[int, str],
+            recording: RecordingRelationIn,
+            response: Response, dataset_name: str
     ):
         """
         Update recordings relations in database
         """
         update_response = self.recording_service.update_recording_relationships(
-            recording_id, recording,dataset_name
+            recording_id, recording, dataset_name
         )
 
         if update_response.errors is not None:

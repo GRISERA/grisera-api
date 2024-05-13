@@ -1,5 +1,7 @@
-from typing import Optional, Any, List
+from typing import Optional, List
+
 from pydantic import BaseModel
+
 from grisera.models.base_model_out import BaseModelOut
 
 
@@ -48,4 +50,3 @@ class DatasetsOut(BaseModelOut):
         links (Optional[list): Hateoas implementation
     """
     datasets: Optional[List[BasicDatasetOut]] = None
-

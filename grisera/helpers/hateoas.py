@@ -1,4 +1,3 @@
-
 def prepare_links(route):
     """
     Prepare list of links for given route differing by its request methods

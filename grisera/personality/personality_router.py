@@ -3,7 +3,9 @@ from typing import Union
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
+from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.personality.personality_model import (
     PersonalityBigFiveIn,
     PersonalityBigFiveOut,
@@ -11,8 +13,6 @@ from grisera.personality.personality_model import (
     PersonalityPanasOut,
     PersonalitiesOut,
 )
-
-from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
 
@@ -37,14 +37,14 @@ class PersonalityRouter:
         response_model=PersonalityBigFiveOut,
     )
     async def create_personality_big_five(
-        self, personality: PersonalityBigFiveIn, response: Response, dataset_name: str
+            self, personality: PersonalityBigFiveIn, response: Response, dataset_name: str
     ):
         """
         Create personality big five model in database
         """
 
         create_response = self.personality_service.save_personality_big_five(
-            personality,dataset_name
+            personality, dataset_name
         )
 
         if create_response.errors is not None:
@@ -55,14 +55,13 @@ class PersonalityRouter:
 
         return create_response
 
-
     @router.post(
         "/personality/panas_model",
         tags=["personality"],
         response_model=PersonalityPanasOut,
     )
     async def create_personality_panas(
-        self, personality: PersonalityPanasIn, response: Response, dataset_name: str
+            self, personality: PersonalityPanasIn, response: Response, dataset_name: str
     ):
         """
         Create personality panas model in database
@@ -77,7 +76,6 @@ class PersonalityRouter:
 
         return create_response
 
-
     @router.get(
         "/personality/{personality_id}",
         tags=["personality"],
@@ -86,7 +84,7 @@ class PersonalityRouter:
         ],
     )
     async def get_personality(
-        self, personality_id: Union[int, str], response: Response, dataset_name: str, depth: int=0
+            self, personality_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
 
         """
@@ -117,7 +115,6 @@ class PersonalityRouter:
 
         return get_response
 
-
     @router.delete(
         "/personality/{personality_id}",
         tags=["personality"],
@@ -126,7 +123,7 @@ class PersonalityRouter:
         ],
     )
     async def delete_personality(
-        self, personality_id: Union[int, str], response: Response, dataset_name: str
+            self, personality_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete personality from database
@@ -146,16 +143,16 @@ class PersonalityRouter:
         response_model=Union[PersonalityBigFiveOut, NotFoundByIdModel],
     )
     async def update_personality_big_five(
-        self,
-        personality_id: Union[int, str],
-        personality: PersonalityBigFiveIn,
-        response: Response, dataset_name: str
+            self,
+            personality_id: Union[int, str],
+            personality: PersonalityBigFiveIn,
+            response: Response, dataset_name: str
     ):
         """
         Update personality big five model in database
         """
         update_response = self.personality_service.update_personality_big_five(
-            personality_id, personality,dataset_name
+            personality_id, personality, dataset_name
         )
 
         if update_response.errors is not None:
@@ -174,16 +171,16 @@ class PersonalityRouter:
         response_model=Union[PersonalityPanasOut, NotFoundByIdModel],
     )
     async def update_personality_panas(
-        self,
-        personality_id: Union[int, str],
-        personality: PersonalityPanasIn,
-        response: Response, dataset_name: str
+            self,
+            personality_id: Union[int, str],
+            personality: PersonalityPanasIn,
+            response: Response, dataset_name: str
     ):
         """
         Update personality panas model in database
         """
         update_response = self.personality_service.update_personality_panas(
-            personality_id, personality,dataset_name
+            personality_id, personality, dataset_name
         )
 
         if update_response.errors is not None:

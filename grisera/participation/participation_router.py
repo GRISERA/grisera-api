@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.participation.participation_model import (
@@ -32,7 +33,7 @@ class ParticipationRouter:
         "/participations", tags=["participations"], response_model=ParticipationOut
     )
     async def create_participation(
-        self, participation: ParticipationIn, response: Response, dataset_name: str
+            self, participation: ParticipationIn, response: Response, dataset_name: str
     ):
         """
         Create participation in database
@@ -45,7 +46,6 @@ class ParticipationRouter:
         create_response.links = get_links(router)
 
         return create_response
-
 
     @router.get(
         "/participations", tags=["participations"], response_model=ParticipationsOut
@@ -62,23 +62,21 @@ class ParticipationRouter:
 
         return get_response
 
-
     @router.get(
         "/participations/{participation_id}",
         tags=["participations"],
         response_model=Union[ParticipationOut, NotFoundByIdModel],
     )
     async def get_participation(
-        self, participation_id: Union[int, str], response: Response, dataset_name: str, depth: int=0
+            self, participation_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
         """
         Get participation from database. Depth attribute specifies how many models will be traversed to create the
         response.
         """
 
-
         get_response = self.participation_service.get_participation(
-            participation_id,dataset_name, depth
+            participation_id, dataset_name, depth
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -88,14 +86,13 @@ class ParticipationRouter:
 
         return get_response
 
-
     @router.delete(
         "/participations/{participation_id}",
         tags=["participations"],
         response_model=Union[ParticipationOut, NotFoundByIdModel],
     )
     async def delete_participation(
-        self, participation_id: Union[int, str], response: Response, dataset_name: str
+            self, participation_id: Union[int, str], response: Response, dataset_name: str
     ):
 
         """
@@ -116,18 +113,17 @@ class ParticipationRouter:
         response_model=Union[ParticipationOut, NotFoundByIdModel],
     )
     async def update_participation_relationships(
-        self,
-        participation_id: Union[int, str],
-        participation: ParticipationIn,
-        response: Response, dataset_name: str
+            self,
+            participation_id: Union[int, str],
+            participation: ParticipationIn,
+            response: Response, dataset_name: str
     ):
         """
         Update participations relations in database
         """
         update_response = self.participation_service.update_participation_relationships(
-            participation_id, participation,dataset_name
+            participation_id, participation, dataset_name
         )
-
 
         if update_response.errors is not None:
             response.status_code = 404

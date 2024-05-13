@@ -1,20 +1,22 @@
+import time
+from typing import Union
+
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
-from grisera.dataset.dataset_model import DatasetIn, DatasetOut, DatasetsOut
-from grisera.helpers.hateoas import get_links
-from grisera.models.not_found_model import NotFoundByIdModel
-from typing import Union
-from grisera.services.service import service
-from grisera.services.service_factory import ServiceFactory
-import time
 
-from grisera.modality.modality_model import ModalityIn
-from grisera.modality.modality_model import Modality as modality_types
-from grisera.life_activity.life_activity_model import LifeActivityIn
-from grisera.life_activity.life_activity_model import LifeActivity as life_activity_types
 from grisera.channel.channel_model import ChannelIn
 from grisera.channel.channel_model import Type as channel_types
+from grisera.dataset.dataset_model import DatasetOut, DatasetsOut
+from grisera.helpers.hateoas import get_links
+from grisera.life_activity.life_activity_model import LifeActivity as life_activity_types
+from grisera.life_activity.life_activity_model import LifeActivityIn
+from grisera.modality.modality_model import Modality as modality_types
+from grisera.modality.modality_model import ModalityIn
+from grisera.models.not_found_model import NotFoundByIdModel
+from grisera.services.service import service
+from grisera.services.service_factory import ServiceFactory
+
 router = InferringRouter()
 
 
@@ -50,15 +52,18 @@ class DatasetRouter:
 
         # create channels nodes for the dataset
         for channel_type in channel_types:
-            create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value), create_dataset_response.name_hash)
+            create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value),
+                                                                        create_dataset_response.name_hash)
 
         # create modalities nodes for the dataset
         for modality_type in modality_types:
-            create_modality_response = self.modality_service.save_modality(ModalityIn(modality=modality_type.value), create_dataset_response.name_hash)
+            create_modality_response = self.modality_service.save_modality(ModalityIn(modality=modality_type.value),
+                                                                           create_dataset_response.name_hash)
 
         # create life activities nodes for the dataset
         for life_activity_type in life_activity_types:
-            create_life_activity_response = self.life_activity_service.save_life_activity(LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.name_hash)
+            create_life_activity_response = self.life_activity_service.save_life_activity(
+                LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.name_hash)
 
         return create_dataset_response
 

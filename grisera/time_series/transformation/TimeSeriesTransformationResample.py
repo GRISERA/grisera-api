@@ -1,10 +1,10 @@
 from typing import List, Optional
 
 from grisera.property.property_model import PropertyIn
-from grisera.time_series.ts_helpers import get_node_property, get_additional_parameter
 from grisera.time_series.time_series_model import TimeSeriesOut, TimeSeriesIn, Type, SignalIn, TransformationType, \
     SignalValueNodesIn
 from grisera.time_series.transformation.TimeSeriesTransformation import TimeSeriesTransformation
+from grisera.time_series.ts_helpers import get_node_property, get_additional_parameter
 
 
 class TimeSeriesTransformationResample(TimeSeriesTransformation):

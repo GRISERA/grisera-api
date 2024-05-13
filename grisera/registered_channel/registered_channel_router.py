@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.registered_channel.registered_channel_model import (
@@ -11,7 +12,6 @@ from grisera.registered_channel.registered_channel_model import (
     RegisteredChannelOut,
 )
 from grisera.services.service import service
-
 from grisera.services.service_factory import ServiceFactory
 
 router = InferringRouter()
@@ -35,7 +35,7 @@ class RegisteredChannelRouter:
         response_model=RegisteredChannelOut,
     )
     async def create_registered_channel(
-        self, registered_channel: RegisteredChannelIn, response: Response, dataset_name : str
+            self, registered_channel: RegisteredChannelIn, response: Response, dataset_name: str
     ):
         """
         Create registered channel in database
@@ -56,7 +56,7 @@ class RegisteredChannelRouter:
         tags=["registered channels"],
         response_model=RegisteredChannelsOut,
     )
-    async def get_registered_channels(self, response: Response, dataset_name : str):
+    async def get_registered_channels(self, response: Response, dataset_name: str):
         """
         Get registered channels from database
         """
@@ -74,7 +74,7 @@ class RegisteredChannelRouter:
         response_model=Union[RegisteredChannelOut, NotFoundByIdModel],
     )
     async def get_registered_channel(
-        self, registered_channel_id: Union[int, str], response: Response, dataset_name : str, depth: int = 0,
+            self, registered_channel_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0,
     ):
         """
         Get registered channels from database. Depth attribute specifies how many models will be traversed to create the
@@ -92,20 +92,19 @@ class RegisteredChannelRouter:
 
         return get_response
 
-
     @router.delete(
         "/registered_channels/{registered_channel_id}",
         tags=["registered channels"],
         response_model=Union[RegisteredChannelOut, NotFoundByIdModel],
     )
     async def delete_registered_channel(
-        self, registered_channel_id: Union[int, str], response: Response, dataset_name: str
+            self, registered_channel_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete registered channels from database
         """
         get_response = self.registered_channel_service.delete_registered_channel(
-            registered_channel_id,dataset_name
+            registered_channel_id, dataset_name
         )
 
         if get_response.errors is not None:
@@ -122,17 +121,17 @@ class RegisteredChannelRouter:
         response_model=Union[RegisteredChannelOut, NotFoundByIdModel],
     )
     async def update_registered_channel_relationships(
-        self,
-        registered_channel_id: Union[int, str],
-        registered_channel: RegisteredChannelIn,
-        response: Response, dataset_name: str
+            self,
+            registered_channel_id: Union[int, str],
+            registered_channel: RegisteredChannelIn,
+            response: Response, dataset_name: str
     ):
         """
         Update registered channels relations in database
         """
         update_response = (
             self.registered_channel_service.update_registered_channel_relationships(
-                registered_channel_id, registered_channel,dataset_name
+                registered_channel_id, registered_channel, dataset_name
             )
         )
 

@@ -1,7 +1,11 @@
+from typing import Union
+
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
+from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.participant_state.participant_state_model import (
     ParticipantStateIn,
     ParticipantStatesOut,
@@ -9,8 +13,6 @@ from grisera.participant_state.participant_state_model import (
     ParticipantStatePropertyIn,
     ParticipantStateRelationIn,
 )
-from typing import Union
-from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
 
@@ -35,12 +37,11 @@ class ParticipantStateRouter:
         response_model=ParticipantStateOut,
     )
     async def create_participant_state(
-        self, participant_state: ParticipantStateIn, response: Response, dataset_name: str
+            self, participant_state: ParticipantStateIn, response: Response, dataset_name: str
     ):
         """
         Create participant state in database
         """
-
 
         create_response = self.participant_state_service.save_participant_state(
             participant_state, dataset_name
@@ -53,13 +54,12 @@ class ParticipantStateRouter:
 
         return create_response
 
-
     @router.get(
         "/participant_state",
         tags=["participant state"],
         response_model=ParticipantStatesOut,
     )
-    async def get_participant_states(self, response: Response,dataset_name: str):
+    async def get_participant_states(self, response: Response, dataset_name: str):
         """
         Get participant states from database
         """
@@ -71,14 +71,13 @@ class ParticipantStateRouter:
 
         return get_response
 
-
     @router.get(
         "/participant_state/{participant_state_id}",
         tags=["participant state"],
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def get_participant_state(
-        self, participant_id: Union[int, str], response: Response,dataset_name: str, depth: int=0
+            self, participant_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
         """
         Get participant state from database. Depth attribute specifies how many models will be traversed to create the
@@ -86,7 +85,7 @@ class ParticipantStateRouter:
         """
 
         get_response = self.participant_state_service.get_participant_state(
-            participant_id,dataset_name, depth
+            participant_id, dataset_name, depth
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -96,14 +95,13 @@ class ParticipantStateRouter:
 
         return get_response
 
-
     @router.delete(
         "/participant_state/{participant_state_id}",
         tags=["participant state"],
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def delete_participant_state(
-        self, participant_state_id: Union[int, str], response: Response, dataset_name: str
+            self, participant_state_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete participant state from database
@@ -119,18 +117,17 @@ class ParticipantStateRouter:
 
         return get_response
 
-
     @router.put(
         "/participant_state/{participant_state_id}",
         tags=["participant state"],
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def update_participant_state(
-        self,
-        participant_state_id: Union[int, str],
-        participant_state: ParticipantStatePropertyIn,
-        response: Response,
-        dataset_name: str
+            self,
+            participant_state_id: Union[int, str],
+            participant_state: ParticipantStatePropertyIn,
+            response: Response,
+            dataset_name: str
     ):
         """
         Update participant state model in database
@@ -146,18 +143,17 @@ class ParticipantStateRouter:
 
         return update_response
 
-
     @router.put(
         "/participant_state/{participant_state_id}/relationships",
         tags=["participant state"],
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def update_participant_state_relationships(
-        self,
-        participant_state_id: Union[int, str],
-        participant_state: ParticipantStateRelationIn,
-        response: Response,
-        dataset_name: str
+            self,
+            participant_state_id: Union[int, str],
+            participant_state: ParticipantStateRelationIn,
+            response: Response,
+            dataset_name: str
     ):
         """
         Update participant state relations in database

@@ -1,5 +1,5 @@
-from typing import Optional, Union, List
 from enum import Enum
+from typing import Optional, Union, List
 
 from pydantic import BaseModel
 

@@ -1,14 +1,16 @@
+from typing import Union
+
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
-from typing import Union
+from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.participant.participant_model import (
     ParticipantIn,
     ParticipantOut,
     ParticipantsOut,
 )
-from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
 
@@ -64,15 +66,14 @@ class ParticipantRouter:
         response_model=Union[ParticipantOut, NotFoundByIdModel],
     )
     async def get_participant(
-        self, participant_id: Union[str, int], response: Response,dataset_name: str, depth: int=0
+            self, participant_id: Union[str, int], response: Response, dataset_name: str, depth: int = 0
     ):
         """
         Get participant from database. Depth attribute specifies how many models will be traversed to create the
         response.
         """
 
-
-        get_response = self.participant_service.get_participant(participant_id,dataset_name, depth)
+        get_response = self.participant_service.get_participant(participant_id, dataset_name, depth)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -81,14 +82,13 @@ class ParticipantRouter:
 
         return get_response
 
-
     @router.delete(
         "/participants/{participant_id}",
         tags=["participants"],
         response_model=Union[ParticipantOut, NotFoundByIdModel],
     )
     async def delete_participant(
-        self, participant_id: Union[int, str], response: Response, dataset_name: str
+            self, participant_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete participant from database
@@ -102,24 +102,23 @@ class ParticipantRouter:
 
         return get_response
 
-
     @router.put(
         "/participants/{participant_id}",
         tags=["participants"],
         response_model=Union[ParticipantOut, NotFoundByIdModel],
     )
     async def update_participant(
-        self,
-        participant_id: Union[int, str],
-        participant: ParticipantIn,
-        response: Response,
-        dataset_name: str
+            self,
+            participant_id: Union[int, str],
+            participant: ParticipantIn,
+            response: Response,
+            dataset_name: str
     ):
         """
         Update participant model in database
         """
         update_response = self.participant_service.update_participant(
-            participant_id, participant,dataset_name
+            participant_id, participant, dataset_name
         )
         if update_response.errors is not None:
             response.status_code = 404

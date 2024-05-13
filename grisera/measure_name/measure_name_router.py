@@ -3,8 +3,9 @@ from typing import Union
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
-from grisera.measure_name.measure_name_model import MeasureNameIn
+
 from grisera.helpers.hateoas import get_links
+from grisera.measure_name.measure_name_model import MeasureNameIn
 from grisera.measure_name.measure_name_model import (
     MeasureNameOut,
     MeasureNamesOut,
@@ -34,7 +35,7 @@ class MeasureNameRouter:
         response_model=MeasureNameOut,
     )
     async def create_measure_name(
-        self, measure_name: MeasureNameIn, response: Response, dataset_name: str
+            self, measure_name: MeasureNameIn, response: Response, dataset_name: str
     ):
         """
         Create measure name in database
@@ -54,7 +55,7 @@ class MeasureNameRouter:
         response_model=Union[MeasureNameOut, NotFoundByIdModel],
     )
     async def get_measure_name(
-        self, measure_name_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
+            self, measure_name_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
         """
         Get measure name from database. Depth attribute specifies how many models will be traversed to create the
@@ -72,11 +73,10 @@ class MeasureNameRouter:
 
         return get_response
 
-
     @router.get(
         "/measure_names", tags=["measure names"], response_model=MeasureNamesOut
     )
-    async def get_measure_names(self, response: Response,dataset_name: str):
+    async def get_measure_names(self, response: Response, dataset_name: str):
         """
         Get measure names from dataset
         """
@@ -87,6 +87,7 @@ class MeasureNameRouter:
         get_response.links = get_links(router)
 
         return get_response
+
     @router.post("/measure_names", tags=["measure names"], response_model=MeasureNamesOut)
     async def create_measure_name(self, measure_name: MeasureNameIn, response: Response, dataset_name: str):
         """
@@ -118,7 +119,8 @@ class MeasureNameRouter:
 
     @router.put("/measure_names/{measure_name_id}", tags=["measure names"],
                 response_model=Union[MeasureNameOut, NotFoundByIdModel])
-    async def update_measure_name(self, measure_name_id: int, measure_name: MeasureNameIn, response: Response, dataset_name: str):
+    async def update_measure_name(self, measure_name_id: int, measure_name: MeasureNameIn, response: Response,
+                                  dataset_name: str):
         """
         Update measure_name model in dataset
         """

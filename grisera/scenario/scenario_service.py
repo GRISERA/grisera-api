@@ -1,7 +1,7 @@
 from typing import Union
 
-from grisera.scenario.scenario_model import ScenarioIn, OrderChangeIn
 from grisera.activity_execution.activity_execution_model import ActivityExecutionIn
+from grisera.scenario.scenario_model import ScenarioIn, OrderChangeIn
 
 
 class ScenarioService:

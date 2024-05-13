@@ -1,4 +1,5 @@
 from typing import Union
+
 from grisera.activity.activity_model import ActivityIn
 
 
@@ -47,7 +48,7 @@ class ActivityService:
         """
         Send request to graph api to delete given activity
         Args:
-            activity_id (int): Id of activity
+            activity_id (int): ID of activity
             dataset_name (str): name of dataset
         Returns:
             Result of request as activity object
@@ -58,7 +59,7 @@ class ActivityService:
         """
         Send request to graph api to update given activity
         Args:
-            activity_id (int): Id of activity
+            activity_id (int): ID of activity
             activity (ActivityIn): Activity to be updated
             dataset_name (str): name of dataset
         Returns:

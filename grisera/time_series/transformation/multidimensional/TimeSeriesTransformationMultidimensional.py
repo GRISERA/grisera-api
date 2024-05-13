@@ -1,7 +1,7 @@
 from typing import List
 
-from grisera.time_series.ts_helpers import get_node_property
 from grisera.time_series.time_series_model import TimeSeriesOut, Type, TimeSeriesMultidimensionalOut
+from grisera.time_series.ts_helpers import get_node_property
 
 
 class TimeSeriesTransformationMultidimensional:

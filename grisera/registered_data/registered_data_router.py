@@ -3,13 +3,14 @@ from typing import Union
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
 from grisera.helpers.hateoas import get_links
+from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.registered_data.registered_data_model import (
     RegisteredDataIn,
     RegisteredDataOut,
     RegisteredDataNodesOut,
 )
-from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
 
@@ -32,7 +33,7 @@ class RegisteredDataRouter:
         "/registered_data", tags=["registered data"], response_model=RegisteredDataOut
     )
     async def create_registered_data(
-        self, registered_data: RegisteredDataIn, response: Response, dataset_name : str
+            self, registered_data: RegisteredDataIn, response: Response, dataset_name: str
     ):
         """
         Create registered data in database
@@ -54,7 +55,7 @@ class RegisteredDataRouter:
         response_model=Union[RegisteredDataOut, NotFoundByIdModel],
     )
     async def get_registered_data(
-        self, registered_data_id: Union[int, str], response: Response, dataset_name : str, depth: int = 0
+            self, registered_data_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
         """
         Get registered data from database. Depth attribute specifies how many models will be traversed to create the
@@ -77,7 +78,7 @@ class RegisteredDataRouter:
         tags=["registered data"],
         response_model=RegisteredDataNodesOut,
     )
-    async def get_registered_data_nodes(self, response: Response, dataset_name : str):
+    async def get_registered_data_nodes(self, response: Response, dataset_name: str):
         """
         Get registered data from database
         """
@@ -95,7 +96,7 @@ class RegisteredDataRouter:
         response_model=Union[RegisteredDataOut, NotFoundByIdModel],
     )
     async def delete_registered_data(
-        self, registered_data_id: Union[int, str], response: Response, dataset_name : str
+            self, registered_data_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete registered data from database
@@ -117,10 +118,10 @@ class RegisteredDataRouter:
         response_model=Union[RegisteredDataOut, NotFoundByIdModel],
     )
     async def update_registered_data(
-        self,
-        registered_data_id: Union[int, str],
-        registered_data: RegisteredDataIn,
-        response: Response, dataset_name : str
+            self,
+            registered_data_id: Union[int, str],
+            registered_data: RegisteredDataIn,
+            response: Response, dataset_name: str
     ):
         """
         Update registered data model in database

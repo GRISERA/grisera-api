@@ -1,7 +1,13 @@
 from typing import Union
+
 from fastapi import Response, Depends
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+
+from grisera.activity_execution.activity_execution_model import (
+    ActivityExecutionOut,
+    ActivityExecutionIn,
+)
 from grisera.helpers.hateoas import get_links
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.scenario.scenario_model import (
@@ -9,10 +15,6 @@ from grisera.scenario.scenario_model import (
     ScenarioOut,
     OrderChangeIn,
     OrderChangeOut,
-)
-from grisera.activity_execution.activity_execution_model import (
-    ActivityExecutionOut,
-    ActivityExecutionIn,
 )
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
@@ -52,10 +54,10 @@ class ScenarioRouter:
         response_model=ActivityExecutionOut,
     )
     async def add_activity_execution(
-        self,
-        previous_id: Union[int, str],
-        activity_execution: ActivityExecutionIn,
-        response: Response, dataset_name: str
+            self,
+            previous_id: Union[int, str],
+            activity_execution: ActivityExecutionIn,
+            response: Response, dataset_name: str
     ):
         """
         Add new activity execution to scenario
@@ -91,7 +93,7 @@ class ScenarioRouter:
         response_model=ActivityExecutionOut,
     )
     async def delete_activity_execution(
-        self, activity_execution_id: Union[int, str], response: Response, dataset_name: str
+            self, activity_execution_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete activity execution from scenario
@@ -113,7 +115,7 @@ class ScenarioRouter:
         response_model=Union[ScenarioOut, NotFoundByIdModel],
     )
     async def get_scenario(
-        self, node_id: Union[int, str], depth: int, response: Response, dataset_name: str
+            self, node_id: Union[int, str], depth: int, response: Response, dataset_name: str
     ):
         """
         Get scenario from database. Depth attribute specifies how many models will be traversed to create the response.

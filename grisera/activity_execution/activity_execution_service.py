@@ -1,6 +1,7 @@
 from typing import Union
 
-from grisera.activity_execution.activity_execution_model import ActivityExecutionPropertyIn, ActivityExecutionRelationIn, \
+from grisera.activity_execution.activity_execution_model import ActivityExecutionPropertyIn, \
+    ActivityExecutionRelationIn, \
     ActivityExecutionIn
 
 

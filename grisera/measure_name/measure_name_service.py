@@ -41,7 +41,7 @@ class MeasureNameService:
 
         Args:
             depth: (int): specifies how many related entities will be traversed to create the response
-            measure_name_id (int | str): Id of measure name
+            measure_name_id (int | str): ID of measure name
             dataset_name (str): name of dataset
 
         Returns:
@@ -53,7 +53,7 @@ class MeasureNameService:
         """
         Send request to graph api to delete given measure_name
         Args:
-            measure_name_id (int): Id of measure_name
+            measure_name_id (int): ID of measure_name
             dataset_name (str): name of dataset
         Returns:
             Result of request as measure_name object
@@ -64,7 +64,7 @@ class MeasureNameService:
         """
         Send request to graph api to update given measure_name
         Args:
-            measure_name_id (int): Id of measure_name
+            measure_name_id (int): ID of measure_name
             measure_name (MeasureNameIn): Measure_name to be updated
             dataset_name (str): name of dataset
         Returns:

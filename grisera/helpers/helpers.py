@@ -1,4 +1,6 @@
-def create_stub_from_response(response, id_key='id', properties=[]):
+def create_stub_from_response(response, id_key='id', properties=None):
+    if properties is None:
+        properties = []
     stub = {id_key: response['id'], 'additional_properties': []}
 
     if 'properties' in response and response["properties"] is not None:
