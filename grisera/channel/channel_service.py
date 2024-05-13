@@ -9,32 +9,35 @@ class ChannelService:
 
     """
 
-    def save_channel(self, channel: ChannelIn):
+    def save_channel(self, channel: ChannelIn, dataset_name: str):
         """
         Send request to graph api to create new channel
 
         Args:
             channel (ChannelIn): Channel to be added
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as channel object
         """
         raise Exception("save_channel not implemented yet")
 
-    def get_channels(self):
+    def get_channels(self, dataset_name: str):
         """
         Send request to graph api to get all channels
-
+        Args:
+            dataset_name (str): name of dataset
         Returns:
             Result of request as list of channel objects
         """
         raise Exception("get_channels not implemented yet")
 
-    def get_channel(self, channel_id: Union[int, str], depth: int = 0):
+    def get_channel(self, channel_id: Union[int, str], dataset_name: str, depth: int = 0):
         """
         Send request to graph api to get given channel
 
         Args:
+            dataset_name (str): name of dataset
             channel_id (int | str ): identity of channel
             depth: (int): specifies how many related entities will be traversed to create the response
 

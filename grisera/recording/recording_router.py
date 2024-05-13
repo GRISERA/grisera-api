@@ -31,11 +31,11 @@ class RecordingRouter:
         self.recording_service = service_factory.get_recording_service()
 
     @router.post("/recordings", tags=["recordings"], response_model=RecordingOut)
-    async def create_recording(self, recording: RecordingIn, response: Response):
+    async def create_recording(self, recording: RecordingIn, response: Response, dataset_name: str):
         """
         Create Recording in database
         """
-        create_response = self.recording_service.save_recording(recording)
+        create_response = self.recording_service.save_recording(recording, dataset_name)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -45,17 +45,18 @@ class RecordingRouter:
         return create_response
 
     @router.get("/recordings", tags=["recordings"], response_model=RecordingsOut)
-    async def get_recordings(self, response: Response):
+    async def get_recordings(self, response: Response, dataset_name: str):
         """
         Get recordings from database
         """
 
-        get_response = self.recording_service.get_recordings()
+        get_response = self.recording_service.get_recordings(dataset_name)
 
         # add links from hateoas
         get_response.links = get_links(router)
 
         return get_response
+
 
     @router.get(
         "/recordings/{recording_id}",
@@ -63,14 +64,15 @@ class RecordingRouter:
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
     async def get_recording(
-        self, recording_id: Union[int, str], response: Response, depth: int=0
+        self, recording_id: Union[int, str], response: Response, dataset_name: str, depth: int=0
     ):
         """
         Get recordings from database. Depth attribute specifies how many models will be traversed to create the
         response.
         """
 
-        get_response = self.recording_service.get_recording(recording_id, depth)
+        get_response = self.recording_service.get_recording(recording_id, dataset_name, depth)
+
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -84,11 +86,11 @@ class RecordingRouter:
         tags=["recordings"],
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
-    async def delete_recording(self, recording_id: Union[int, str], response: Response):
+    async def delete_recording(self, recording_id: Union[int, str], response: Response, dataset_name: str):
         """
         Delete recordings from database
         """
-        get_response = self.recording_service.delete_recording(recording_id)
+        get_response = self.recording_service.delete_recording(recording_id, dataset_name)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -96,6 +98,7 @@ class RecordingRouter:
         get_response.links = get_links(router)
 
         return get_response
+
 
     @router.put(
         "/recordings/{recording_id}",
@@ -106,14 +109,15 @@ class RecordingRouter:
         self,
         recording_id: Union[int, str],
         recording: RecordingPropertyIn,
-        response: Response,
+        response: Response, dataset_name: str
     ):
         """
         Update recording model in database
         """
         update_response = self.recording_service.update_recording(
-            recording_id, recording
+            recording_id, recording,dataset_name
         )
+
         if update_response.errors is not None:
             response.status_code = 404
 
@@ -131,14 +135,15 @@ class RecordingRouter:
         self,
         recording_id: Union[int, str],
         recording: RecordingRelationIn,
-        response: Response,
+        response: Response, dataset_name: str
     ):
         """
         Update recordings relations in database
         """
         update_response = self.recording_service.update_recording_relationships(
-            recording_id, recording
+            recording_id, recording,dataset_name
         )
+
         if update_response.errors is not None:
             response.status_code = 404
 

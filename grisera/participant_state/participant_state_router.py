@@ -35,14 +35,15 @@ class ParticipantStateRouter:
         response_model=ParticipantStateOut,
     )
     async def create_participant_state(
-        self, participant_state: ParticipantStateIn, response: Response
+        self, participant_state: ParticipantStateIn, response: Response, dataset_name: str
     ):
         """
         Create participant state in database
         """
 
+
         create_response = self.participant_state_service.save_participant_state(
-            participant_state
+            participant_state, dataset_name
         )
         if create_response.errors is not None:
             response.status_code = 422
@@ -52,22 +53,24 @@ class ParticipantStateRouter:
 
         return create_response
 
+
     @router.get(
         "/participant_state",
         tags=["participant state"],
         response_model=ParticipantStatesOut,
     )
-    async def get_participant_states(self, response: Response):
+    async def get_participant_states(self, response: Response,dataset_name: str):
         """
         Get participant states from database
         """
 
-        get_response = self.participant_state_service.get_participant_states()
+        get_response = self.participant_state_service.get_participant_states(dataset_name)
 
         # add links from hateoas
         get_response.links = get_links(router)
 
         return get_response
+
 
     @router.get(
         "/participant_state/{participant_state_id}",
@@ -75,7 +78,7 @@ class ParticipantStateRouter:
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def get_participant_state(
-        self, participant_id: Union[int, str], response: Response, depth: int=0
+        self, participant_id: Union[int, str], response: Response,dataset_name: str, depth: int=0
     ):
         """
         Get participant state from database. Depth attribute specifies how many models will be traversed to create the
@@ -83,7 +86,7 @@ class ParticipantStateRouter:
         """
 
         get_response = self.participant_state_service.get_participant_state(
-            participant_id, depth
+            participant_id,dataset_name, depth
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -92,6 +95,7 @@ class ParticipantStateRouter:
         get_response.links = get_links(router)
 
         return get_response
+
 
     @router.delete(
         "/participant_state/{participant_state_id}",
@@ -99,13 +103,13 @@ class ParticipantStateRouter:
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def delete_participant_state(
-        self, participant_state_id: Union[int, str], response: Response
+        self, participant_state_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete participant state from database
         """
         get_response = self.participant_state_service.delete_participant_state(
-            participant_state_id
+            participant_state_id, dataset_name
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -114,6 +118,7 @@ class ParticipantStateRouter:
         get_response.links = get_links(router)
 
         return get_response
+
 
     @router.put(
         "/participant_state/{participant_state_id}",
@@ -125,12 +130,13 @@ class ParticipantStateRouter:
         participant_state_id: Union[int, str],
         participant_state: ParticipantStatePropertyIn,
         response: Response,
+        dataset_name: str
     ):
         """
         Update participant state model in database
         """
         update_response = self.participant_state_service.update_participant_state(
-            participant_state_id, participant_state
+            participant_state_id, participant_state, dataset_name
         )
         if update_response.errors is not None:
             response.status_code = 404
@@ -139,6 +145,7 @@ class ParticipantStateRouter:
         update_response.links = get_links(router)
 
         return update_response
+
 
     @router.put(
         "/participant_state/{participant_state_id}/relationships",
@@ -150,13 +157,14 @@ class ParticipantStateRouter:
         participant_state_id: Union[int, str],
         participant_state: ParticipantStateRelationIn,
         response: Response,
+        dataset_name: str
     ):
         """
         Update participant state relations in database
         """
         update_response = (
             self.participant_state_service.update_participant_state_relationships(
-                participant_state_id, participant_state
+                participant_state_id, participant_state, dataset_name
             )
         )
         if update_response.errors is not None:

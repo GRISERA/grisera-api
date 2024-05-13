@@ -54,7 +54,7 @@ class MeasureNameIn(BaseModel):
 
 class BasicMeasureNameOut(MeasureNameIn):
     """
-    Model of measure name in database
+    Model of measure name in dataset
 
     Attributes:
     id (Optional[Union[int, str]]): Id of measure name returned from api

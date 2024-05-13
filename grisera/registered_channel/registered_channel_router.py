@@ -35,13 +35,13 @@ class RegisteredChannelRouter:
         response_model=RegisteredChannelOut,
     )
     async def create_registered_channel(
-        self, registered_channel: RegisteredChannelIn, response: Response
+        self, registered_channel: RegisteredChannelIn, response: Response, dataset_name : str
     ):
         """
         Create registered channel in database
         """
         create_response = self.registered_channel_service.save_registered_channel(
-            registered_channel
+            registered_channel, dataset_name
         )
         if create_response.errors is not None:
             response.status_code = 422
@@ -56,12 +56,12 @@ class RegisteredChannelRouter:
         tags=["registered channels"],
         response_model=RegisteredChannelsOut,
     )
-    async def get_registered_channels(self, response: Response):
+    async def get_registered_channels(self, response: Response, dataset_name : str):
         """
         Get registered channels from database
         """
 
-        get_response = self.registered_channel_service.get_registered_channels()
+        get_response = self.registered_channel_service.get_registered_channels(dataset_name)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -74,7 +74,7 @@ class RegisteredChannelRouter:
         response_model=Union[RegisteredChannelOut, NotFoundByIdModel],
     )
     async def get_registered_channel(
-        self, registered_channel_id: Union[int, str], response: Response, depth: int = 0,
+        self, registered_channel_id: Union[int, str], response: Response, dataset_name : str, depth: int = 0,
     ):
         """
         Get registered channels from database. Depth attribute specifies how many models will be traversed to create the
@@ -82,7 +82,7 @@ class RegisteredChannelRouter:
         """
 
         get_response = self.registered_channel_service.get_registered_channel(
-            registered_channel_id, depth
+            registered_channel_id, dataset_name, depth
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -92,20 +92,22 @@ class RegisteredChannelRouter:
 
         return get_response
 
+
     @router.delete(
         "/registered_channels/{registered_channel_id}",
         tags=["registered channels"],
         response_model=Union[RegisteredChannelOut, NotFoundByIdModel],
     )
     async def delete_registered_channel(
-        self, registered_channel_id: Union[int, str], response: Response
+        self, registered_channel_id: Union[int, str], response: Response, dataset_name: str
     ):
         """
         Delete registered channels from database
         """
         get_response = self.registered_channel_service.delete_registered_channel(
-            registered_channel_id
+            registered_channel_id,dataset_name
         )
+
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -123,16 +125,17 @@ class RegisteredChannelRouter:
         self,
         registered_channel_id: Union[int, str],
         registered_channel: RegisteredChannelIn,
-        response: Response,
+        response: Response, dataset_name: str
     ):
         """
         Update registered channels relations in database
         """
         update_response = (
             self.registered_channel_service.update_registered_channel_relationships(
-                registered_channel_id, registered_channel
+                registered_channel_id, registered_channel,dataset_name
             )
         )
+
         if update_response.errors is not None:
             response.status_code = 404
 

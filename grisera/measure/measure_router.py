@@ -30,12 +30,12 @@ class MeasureRouter:
         self.measure_service = service_factory.get_measure_service()
 
     @router.post("/measures", tags=["measures"], response_model=MeasureOut)
-    async def create_measure(self, measure: MeasureIn, response: Response):
+    async def create_measure(self, measure: MeasureIn, response: Response, dataset_name: str):
         """
         Create measure in database
         """
 
-        create_response = self.measure_service.save_measure(measure)
+        create_response = self.measure_service.save_measure(measure, dataset_name)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -45,17 +45,18 @@ class MeasureRouter:
         return create_response
 
     @router.get("/measures", tags=["measures"], response_model=MeasuresOut)
-    async def get_measures(self, response: Response):
+    async def get_measures(self, response: Response, dataset_name: str):
         """
         Get measures from database
         """
 
-        get_response = self.measure_service.get_measures()
+        get_response = self.measure_service.get_measures(dataset_name)
 
         # add links from hateoas
         get_response.links = get_links(router)
 
         return get_response
+
 
     @router.get(
         "/measures/{measure_id}",
@@ -63,13 +64,16 @@ class MeasureRouter:
         response_model=Union[MeasureOut, NotFoundByIdModel],
     )
     async def get_measure(
-        self, measure_id: Union[int, str], response: Response, depth: int = 0
+        self, measure_id: Union[int, str], response: Response,dataset_name: str, depth: int = 0
     ):
+
         """
         Get measure from database. Depth attribute specifies how many models will be traversed to create the response.
         """
 
-        get_response = self.measure_service.get_measure(measure_id, depth)
+
+        get_response = self.measure_service.get_measure(measure_id,dataset_name, depth)
+
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -78,16 +82,17 @@ class MeasureRouter:
 
         return get_response
 
+
     @router.delete(
         "/measures/{measure_id}",
         tags=["measures"],
         response_model=Union[MeasureOut, NotFoundByIdModel],
     )
-    async def delete_measure(self, measure_id: Union[int, str], response: Response):
+    async def delete_measure(self, measure_id: Union[int, str], response: Response,dataset_name: str):
         """
         Delete measure from database
         """
-        get_response = self.measure_service.delete_measure(measure_id)
+        get_response = self.measure_service.delete_measure(measure_id, dataset_name)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -106,11 +111,12 @@ class MeasureRouter:
         measure_id: Union[int, str],
         measure: MeasurePropertyIn,
         response: Response,
+        dataset_name: str
     ):
         """
         Update measure model in database
         """
-        update_response = self.measure_service.update_measure(measure_id, measure)
+        update_response = self.measure_service.update_measure(measure_id, measure,dataset_name)
         if update_response.errors is not None:
             response.status_code = 404
 
@@ -129,13 +135,15 @@ class MeasureRouter:
         measure_id: Union[int, str],
         measure: MeasureRelationIn,
         response: Response,
+        dataset_name: str
     ):
         """
         Update measure relations in database
         """
         update_response = self.measure_service.update_measure_relationships(
-            measure_id, measure
+            measure_id, measure,dataset_name
         )
+
         if update_response.errors is not None:
             response.status_code = 404
 

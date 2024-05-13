@@ -9,59 +9,65 @@ class MeasureService:
 
     """
 
-    def save_measure(self, measure: MeasureIn):
+    def save_measure(self, measure: MeasureIn, dataset_name: str):
         """
         Send request to graph api to create new measure
 
         Args:
             measure (MeasureIn): Measure to be added
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as measure object
         """
         raise Exception("save_measure not implemented yet")
 
-    def get_measures(self):
+    def get_measures(self, dataset_name: str):
         """
         Send request to graph api to get measures
 
+        Args:
+            dataset_name (str): name of dataset
         Returns:
             Result of request as list of measures objects
         """
         raise Exception("get_measures not implemented yet")
 
-    def get_measure(self, measure_id: Union[int, str], depth: int = 0):
+    def get_measure(self, measure_id: Union[int, str], dataset_name: str, depth: int = 0):
         """
         Send request to graph api to get given measure
 
         Args:
             depth: (int): specifies how many related entities will be traversed to create the response
             measure_id (int | str): identity of measure
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as measure object
         """
         raise Exception("get_measure not implemented yet")
 
-    def delete_measure(self, measure_id: Union[int, str]):
+    def delete_measure(self, measure_id: Union[int, str], dataset_name: str):
         """
         Send request to graph api to delete given measure
 
         Args:
             measure_id (int | str): identity of measure
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as measure object
         """
         raise Exception("delete_measure not implemented yet")
 
-    def update_measure(self, measure_id: Union[int, str], measure: MeasurePropertyIn):
+    def update_measure(self, measure_id: Union[int, str], measure: MeasurePropertyIn, dataset_name: str):
         """
         Send request to graph api to update given measure
 
         Args:
             measure_id (int | str): identity of measure
             measure (MeasurePropertyIn): Properties to update
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as measure object
@@ -69,13 +75,14 @@ class MeasureService:
         raise Exception("update_measure not implemented yet")
 
     def update_measure_relationships(self, measure_id: Union[int, str],
-                                     measure: MeasureRelationIn):
+                                     measure: MeasureRelationIn, dataset_name: str):
         """
         Send request to graph api to update given measure
 
         Args:
             measure_id (int | str): identity of measure
             measure (MeasureRelationIn): Relationships to update
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as measure object

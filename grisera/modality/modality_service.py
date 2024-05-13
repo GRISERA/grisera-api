@@ -9,34 +9,39 @@ class ModalityService:
 
     """
 
-    def save_modality(self, modality: ModalityIn):
+    def save_modality(self, modality: ModalityIn, dataset_name: str):
         """
         Send request to graph api to create new modality
 
         Args:
             modality (ModalityIn): Modality to be added
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as modality object
         """
         raise Exception("save_modality not implemented yet")
 
-    def get_modalities(self):
+    def get_modalities(self, dataset_name: str):
         """
         Send request to graph api to get all modalities
+
+        Args:
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as list of modality objects
         """
         raise Exception("get_modalities not implemented yet")
 
-    def get_modality(self, modality_id: Union[int, str], depth: int = 0):
+    def get_modality(self, modality_id: Union[int, str], dataset_name: str, depth: int = 0):
         """
         Send request to graph api to get given modality
 
         Args:
             depth: (int): specifies how many related entities will be traversed to create the response
             modality_id (int | str): identity of modality
+            dataset_name (str): name of dataset
 
         Returns:
             Result of request as modality object

@@ -34,12 +34,12 @@ class LifeActivityRouter:
         response_model=LifeActivityOut,
     )
     async def create_life_activity(
-        self, life_activity: LifeActivityIn, response: Response
+        self, life_activity: LifeActivityIn, response: Response, dataset_name: str
     ):
         """
         Create channel in database
         """
-        create_response = self.life_activity_service.save_life_activity(life_activity)
+        create_response = self.life_activity_service.save_life_activity(life_activity, dataset_name)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -54,15 +54,18 @@ class LifeActivityRouter:
         response_model=Union[LifeActivityOut, NotFoundByIdModel],
     )
     async def get_life_activity(
-        self, life_activity_id: Union[int, str], response: Response, depth: int = 0
+        self, life_activity_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
     ):
+
         """
         Get life activity from database. Depth attribute specifies how many models will be traversed to create the
         response.
         """
+
         get_response = self.life_activity_service.get_life_activity(
-            life_activity_id, depth
+            life_activity_id, dataset_name, depth
         )
+
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -71,15 +74,17 @@ class LifeActivityRouter:
 
         return get_response
 
+
     @router.get(
         "/life_activities", tags=["life activities"], response_model=LifeActivitiesOut
     )
-    async def get_life_activities(self, response: Response):
+    async def get_life_activities(self, response: Response, dataset_name: str):
+
         """
         Get life activities from database
         """
 
-        get_response = self.life_activity_service.get_life_activities()
+        get_response = self.life_activity_service.get_life_activities(dataset_name)
 
         # add links from hateoas
         get_response.links = get_links(router)
