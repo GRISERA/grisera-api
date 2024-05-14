@@ -71,7 +71,7 @@ class ActivityRouter:
 
     @router.delete("/activities/{activity_id}", tags=["activities"],
                    response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def delete_activity(self, activity_id: int, response: Response, dataset_name: str):
+    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str):
         """
         Delete activity from dataset
         """
@@ -86,7 +86,7 @@ class ActivityRouter:
 
     @router.put("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def update_activity(self, activity_id: int, activity: ActivityIn, response: Response, dataset_name: str):
+    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response, dataset_name: str):
         """
         Update activity model in dataset
         """
