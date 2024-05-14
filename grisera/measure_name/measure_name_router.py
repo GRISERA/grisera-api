@@ -29,26 +29,6 @@ class MeasureNameRouter:
     def __init__(self, service_factory: ServiceFactory = Depends(service.get_service_factory)):
         self.measure_name_service = service_factory.get_measure_name_service()
 
-    @router.post(
-        "/measure_names",
-        tags=["measure names"],
-        response_model=MeasureNameOut,
-    )
-    async def create_measure_name(
-            self, measure_name: MeasureNameIn, response: Response, dataset_name: str
-    ):
-        """
-        Create measure name in database
-        """
-        create_response = self.measure_name_service.save_measure_name(measure_name, dataset_name)
-        if create_response.errors is not None:
-            response.status_code = 422
-
-        # add links from hateoas
-        create_response.links = get_links(router)
-
-        return create_response
-
     @router.get(
         "/measure_names/{measure_name_id}",
         tags=["measure names"],

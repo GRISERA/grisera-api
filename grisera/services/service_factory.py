@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from grisera import DatasetService
+from grisera.dataset.dataset_service import DatasetService
 from grisera.activity.activity_service import ActivityService
 from grisera.activity_execution.activity_execution_service import ActivityExecutionService
 from grisera.appearance.appearance_service import AppearanceService

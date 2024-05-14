@@ -31,7 +31,7 @@ class LifeActivityRouter:
 
     @router.post(
         "/life_activities",
-        tags=["life_activities"],
+        tags=["life activities"],
         response_model=LifeActivityOut,
     )
     async def create_life_activity(
