@@ -68,7 +68,7 @@ class MeasureNameRouter:
 
         return get_response
 
-    @router.post("/measure_names", tags=["measure names"], response_model=MeasureNamesOut)
+    @router.post("/measure_names", tags=["measure names"], response_model=MeasureNameOut)
     async def create_measure_name(self, measure_name: MeasureNameIn, response: Response, dataset_name: str):
         """
         Create measure_name in dataset
@@ -84,7 +84,7 @@ class MeasureNameRouter:
 
     @router.delete("/measure_names/{measure_name_id}", tags=["measure names"],
                    response_model=Union[MeasureNameOut, NotFoundByIdModel])
-    async def delete_measure_name(self, measure_name_id: int, response: Response, dataset_name: str):
+    async def delete_measure_name(self, measure_name_id: Union[int, str], response: Response, dataset_name: str):
         """
         Delete measure_name from dataset
         """
@@ -99,7 +99,7 @@ class MeasureNameRouter:
 
     @router.put("/measure_names/{measure_name_id}", tags=["measure names"],
                 response_model=Union[MeasureNameOut, NotFoundByIdModel])
-    async def update_measure_name(self, measure_name_id: int, measure_name: MeasureNameIn, response: Response,
+    async def update_measure_name(self, measure_name_id: Union[int, str], measure_name: MeasureNameIn, response: Response,
                                   dataset_name: str):
         """
         Update measure_name model in dataset
