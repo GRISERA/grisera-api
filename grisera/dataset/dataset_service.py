@@ -1,10 +1,15 @@
+from typing import Union
+
+from grisera.dataset.dataset_model import DatasetIn
+
+
 class DatasetService:
-    def save_dataset(self, dataset_name: str):
+    def save_dataset(self, dataset: DatasetIn):
         """
         Creates new dataset
 
         Args:
-            dataset_name (str): name of dataset to create
+            dataset (DatasetIn): Dataset to be added
 
         Returns:
             Result of request as dataset object
@@ -12,7 +17,7 @@ class DatasetService:
 
         raise Exception("save_database not implemented yet")
 
-    def get_datasets(self, dataset_name: str):
+    def get_datasets(self):
         """
         Get all datasets
 
@@ -21,24 +26,24 @@ class DatasetService:
         """
         raise Exception("get_datasets not implemented yet")
 
-    def get_dataset(self, dataset_name: str):
+    def get_dataset(self, dataset_id: Union[int, str]):
         """
         Get dataset by name
 
         Args:
-            dataset_name (str): name of dataset
+            dataset_id (int | str): identity of dataset
 
         Returns:
             Result of request as dataset object
         """
         raise Exception("get_dataset not implemented yet")
 
-    def delete_dataset(self, dataset_name: str):
+    def delete_dataset(self, dataset_id: Union[int, str]):
         """
         Delete given dataset
 
         Args:
-            dataset_name (str): name of dataset
+            dataset_id (int | str): identity of dataset
 
         Returns:
             Result of request as dataset object
