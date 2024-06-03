@@ -64,7 +64,7 @@ class ArrangementRouter:
 
         return get_response
 
-    @router.post("/arrangements", tags=["arrangements"], response_model=ArrangementsOut)
+    @router.post("/arrangements", tags=["arrangements"], response_model=ArrangementOut)
     async def create_activity(self, arrangement: ArrangementIn, response: Response, dataset_name: str):
         """
         Create arrangement in dataset
