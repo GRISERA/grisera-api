@@ -7,7 +7,7 @@ from fastapi_utils.inferring_router import InferringRouter
 
 from grisera.channel.channel_model import ChannelIn
 from grisera.channel.channel_model import Type as channel_types
-from grisera.dataset.dataset_model import DatasetOut, DatasetsOut
+from grisera.dataset.dataset_model import DatasetOut, DatasetsOut, DatasetIn
 from grisera.helpers.hateoas import get_links
 from grisera.life_activity.life_activity_model import LifeActivity as life_activity_types
 from grisera.life_activity.life_activity_model import LifeActivityIn
@@ -36,11 +36,11 @@ class DatasetRouter:
         self.life_activity_service = service_factory.get_life_activity_service()
 
     @router.post("/datasets", tags=["datasets"], response_model=DatasetOut)
-    async def create_dataset(self, response: Response, dataset_name_from_user: str):
+    async def create_dataset(self, response: Response, dataset: DatasetIn):
         """
         Create dataset with given name
         """
-        create_dataset_response = self.dataset_service.save_dataset(dataset_name_from_user)
+        create_dataset_response = self.dataset_service.save_dataset(dataset)
         if create_dataset_response.errors is not None:
             response.status_code = 422
 
@@ -50,30 +50,30 @@ class DatasetRouter:
         # wait for the dataset to be created
         time.sleep(0.5)
 
-        # create channels nodes for the dataset
-        for channel_type in channel_types:
-            create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value),
-                                                                        create_dataset_response.name_hash)
-
-        # create modalities nodes for the dataset
-        for modality_type in modality_types:
-            create_modality_response = self.modality_service.save_modality(ModalityIn(modality=modality_type.value),
-                                                                           create_dataset_response.name_hash)
-
-        # create life activities nodes for the dataset
-        for life_activity_type in life_activity_types:
-            create_life_activity_response = self.life_activity_service.save_life_activity(
-                LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.name_hash)
+        # # create channels nodes for the dataset
+        # for channel_type in channel_types:
+        #     create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value),
+        #                                                                 create_dataset_response.name_hash)
+        #
+        # # create modalities nodes for the dataset
+        # for modality_type in modality_types:
+        #     create_modality_response = self.modality_service.save_modality(ModalityIn(modality=modality_type.value),
+        #                                                                    create_dataset_response.name_hash)
+        #
+        # # create life activities nodes for the dataset
+        # for life_activity_type in life_activity_types:
+        #     create_life_activity_response = self.life_activity_service.save_life_activity(
+        #         LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.name_hash)
 
         return create_dataset_response
 
     @router.get("/datasets/{database_name}", tags=["datasets"], response_model=Union[DatasetOut, NotFoundByIdModel])
-    async def get_dataset(self, response: Response, dataset_name: str):
+    async def get_dataset(self, response: Response, dataset_id: Union[int, str]):
         """
         Get dataset by name
         """
 
-        get_response = self.dataset_service.get_dataset(dataset_name)
+        get_response = self.dataset_service.get_dataset(dataset_id)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -96,11 +96,11 @@ class DatasetRouter:
         return get_response
 
     @router.delete("/datasets/{database_name}", tags=["datasets"], response_model=Union[DatasetOut, NotFoundByIdModel])
-    async def delete_dataset(self, response: Response, dataset_name: str):
+    async def delete_dataset(self, response: Response, dataset_id: Union[int, str]):
         """
         Delete dataset by name
         """
-        delete_response = self.dataset_service.delete_dataset(dataset_name)
+        delete_response = self.dataset_service.delete_dataset(dataset_id)
         if delete_response.errors is not None:
             response.status_code = 404
 
