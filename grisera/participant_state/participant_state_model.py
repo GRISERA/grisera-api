@@ -41,7 +41,7 @@ class ParticipantStateIn(ParticipantStatePropertyIn, ParticipantStateRelationIn)
     """
 
 
-class BasicParticipantStateOut(ParticipantStatePropertyIn):
+class BasicParticipantStateOut(ParticipantStateIn):
     """
     Basic model of participant
 
