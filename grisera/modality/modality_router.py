@@ -10,8 +10,9 @@ from grisera.modality.modality_model import ModalityOut, ModalitiesOut
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
+from grisera.helpers.helpers import check_dataset_permission
 
-router = InferringRouter()
+router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 
 
 @cbv(router)

@@ -12,7 +12,7 @@ from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
 
-router = InferringRouter()
+router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 
 
 @cbv(router)
@@ -28,7 +28,7 @@ class ActivityRouter:
         self.activity_service = service_factory.get_activity_service()
 
     @router.post("/activities", tags=["activities"], response_model=ActivityOut)
-    async def create_activity(self, activity: ActivityIn, response: Response, dataset_name: str = Depends(check_dataset_permission)):
+    async def create_activity(self, activity: ActivityIn, response: Response, dataset_name: str):
         """
         Create activity in dataset
         """
@@ -43,7 +43,7 @@ class ActivityRouter:
 
     @router.get("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel, ], )
-    async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str = Depends(check_dataset_permission), depth: int = 0):
+    async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0):
         """
         Get activity from database. Depth attribute specifies how many models will be traversed to create the response.
         """
@@ -58,7 +58,7 @@ class ActivityRouter:
         return get_response
 
     @router.get("/activities", tags=["activities"], response_model=ActivitiesOut)
-    async def get_activities(self, response: Response, dataset_name: str = Depends(check_dataset_permission)):
+    async def get_activities(self, response: Response, dataset_name: str):
         """
         Get activities from dataset
         """
@@ -72,7 +72,7 @@ class ActivityRouter:
 
     @router.delete("/activities/{activity_id}", tags=["activities"],
                    response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str = Depends(check_dataset_permission)):
+    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str):
         """
         Delete activity from dataset
         """
@@ -87,7 +87,7 @@ class ActivityRouter:
 
     @router.put("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response, dataset_name: str = Depends(check_dataset_permission)):
+    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response, dataset_name: str):
         """
         Update activity model in dataset
         """

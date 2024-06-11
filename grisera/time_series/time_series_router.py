@@ -18,8 +18,9 @@ from grisera.time_series.time_series_model import (
     TimeSeriesTransformationIn,
     TimeSeriesMultidimensionalOut
 )
+from grisera.helpers.helpers import check_dataset_permission
 
-router = InferringRouter()
+router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 
 
 @cbv(router)

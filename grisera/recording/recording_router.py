@@ -15,8 +15,9 @@ from grisera.recording.recording_model import (
 )
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
+from grisera.helpers.helpers import check_dataset_permission
 
-router = InferringRouter()
+router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 
 
 @cbv(router)
