@@ -1,3 +1,8 @@
+from fastapi import Depends, HTTPException
+
+from grisera.auth.auth_bearer import JWTBearer
+
+
 def create_stub_from_response(response, id_key='id', properties=None):
     if properties is None:
         properties = []
@@ -11,3 +16,9 @@ def create_stub_from_response(response, id_key='id', properties=None):
                 stub['additional_properties'].append({'key': prop['key'], 'value': prop['value']})
 
     return stub
+
+def check_dataset_permission(dataset_name: str, token=Depends(JWTBearer())):
+    if not any(str(permission['datasetId']) == dataset_name for permission in token['permissions']):
+        raise HTTPException(status_code=403, detail="Invalid authentication to dataset")
+
+    return dataset_name

@@ -7,6 +7,7 @@ from fastapi_utils.inferring_router import InferringRouter
 from grisera.activity.activity_model import ActivityIn
 from grisera.activity.activity_model import ActivityOut, ActivitiesOut
 from grisera.helpers.hateoas import get_links
+from grisera.helpers.helpers import check_dataset_permission
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
@@ -27,7 +28,7 @@ class ActivityRouter:
         self.activity_service = service_factory.get_activity_service()
 
     @router.post("/activities", tags=["activities"], response_model=ActivityOut)
-    async def create_activity(self, activity: ActivityIn, response: Response, dataset_name: str):
+    async def create_activity(self, activity: ActivityIn, response: Response, dataset_name: str = Depends(check_dataset_permission)):
         """
         Create activity in dataset
         """
@@ -41,8 +42,8 @@ class ActivityRouter:
         return create_response
 
     @router.get("/activities/{activity_id}", tags=["activities"],
-                response_model=Union[ActivityOut, NotFoundByIdModel], )
-    async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0):
+                response_model=Union[ActivityOut, NotFoundByIdModel, ], )
+    async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str = Depends(check_dataset_permission), depth: int = 0):
         """
         Get activity from database. Depth attribute specifies how many models will be traversed to create the response.
         """
@@ -57,7 +58,7 @@ class ActivityRouter:
         return get_response
 
     @router.get("/activities", tags=["activities"], response_model=ActivitiesOut)
-    async def get_activities(self, response: Response, dataset_name: str):
+    async def get_activities(self, response: Response, dataset_name: str = Depends(check_dataset_permission)):
         """
         Get activities from dataset
         """
@@ -71,7 +72,7 @@ class ActivityRouter:
 
     @router.delete("/activities/{activity_id}", tags=["activities"],
                    response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str):
+    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str = Depends(check_dataset_permission)):
         """
         Delete activity from dataset
         """
@@ -86,7 +87,7 @@ class ActivityRouter:
 
     @router.put("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response, dataset_name: str):
+    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response, dataset_name: str = Depends(check_dataset_permission)):
         """
         Update activity model in dataset
         """
