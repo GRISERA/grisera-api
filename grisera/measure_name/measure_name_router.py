@@ -5,12 +5,12 @@ from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 
 from grisera.helpers.hateoas import get_links
+from grisera.helpers.helpers import check_dataset_permission
 from grisera.measure_name.measure_name_model import MeasureNameIn
 from grisera.measure_name.measure_name_model import (
     MeasureNameOut,
     MeasureNamesOut,
 )
-from grisera.helpers.helpers import check_dataset_permission
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
@@ -100,7 +100,8 @@ class MeasureNameRouter:
 
     @router.put("/measure_names/{measure_name_id}", tags=["measure names"],
                 response_model=Union[MeasureNameOut, NotFoundByIdModel])
-    async def update_measure_name(self, measure_name_id: Union[int, str], measure_name: MeasureNameIn, response: Response,
+    async def update_measure_name(self, measure_name_id: Union[int, str], measure_name: MeasureNameIn,
+                                  response: Response,
                                   dataset_name: str):
         """
         Update measure_name model in dataset

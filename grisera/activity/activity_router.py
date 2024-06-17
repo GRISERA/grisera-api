@@ -42,7 +42,7 @@ class ActivityRouter:
         return create_response
 
     @router.get("/activities/{activity_id}", tags=["activities"],
-                response_model=Union[ActivityOut, NotFoundByIdModel, ], )
+                response_model=Union[ActivityOut, NotFoundByIdModel], )
     async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0):
         """
         Get activity from database. Depth attribute specifies how many models will be traversed to create the response.
@@ -87,7 +87,8 @@ class ActivityRouter:
 
     @router.put("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response, dataset_name: str):
+    async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response,
+                              dataset_name: str):
         """
         Update activity model in dataset
         """

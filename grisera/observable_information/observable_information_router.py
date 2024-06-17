@@ -5,6 +5,7 @@ from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 
 from grisera.helpers.hateoas import get_links
+from grisera.helpers.helpers import check_dataset_permission
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.observable_information.observable_information_model import (
     ObservableInformationIn,
@@ -13,7 +14,6 @@ from grisera.observable_information.observable_information_model import (
 )
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
-from grisera.helpers.helpers import check_dataset_permission
 
 router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 

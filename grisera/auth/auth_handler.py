@@ -1,6 +1,9 @@
 import time
+
 import jwt
+
 from grisera.auth.auth_config import JWT_SECRET, JWT_ALGORITHM
+
 
 def verify_jwt(jwtoken: str) -> bool:
     is_token_valid: bool = False
@@ -12,6 +15,7 @@ def verify_jwt(jwtoken: str) -> bool:
     if payload:
         is_token_valid = True
     return is_token_valid
+
 
 def decodeJWT(token: str) -> dict:
     try:

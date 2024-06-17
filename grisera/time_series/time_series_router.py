@@ -6,6 +6,7 @@ from fastapi_utils.inferring_router import InferringRouter
 from starlette.requests import Request
 
 from grisera.helpers.hateoas import get_links
+from grisera.helpers.helpers import check_dataset_permission
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
 from grisera.services.service_factory import ServiceFactory
@@ -18,7 +19,6 @@ from grisera.time_series.time_series_model import (
     TimeSeriesTransformationIn,
     TimeSeriesMultidimensionalOut
 )
-from grisera.helpers.helpers import check_dataset_permission
 
 router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 
