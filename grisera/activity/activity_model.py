@@ -32,7 +32,7 @@ class ActivityPropertyIn(BaseModel):
         additional_properties (Optional[List[PropertyIn]]): Additional properties for activity
         """
 
-    activity: str
+    activity: Activity
     additional_properties: Optional[List[PropertyIn]]
 
 

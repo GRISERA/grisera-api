@@ -6,33 +6,33 @@ from pydantic import BaseModel
 from grisera.models.base_model_out import BaseModelOut
 
 
-class Type(str, Enum):
+class Types(tuple, Enum):
     """
     Types of channel
 
     Attributes:
-    audio (str): Audio channel
-    bvp (str): BVP channel
-    chest_size (str): Chest size channel
-    depth_video (str): Depth video channel
-    ecg (str): ECG channel
-    eda (str): EDA channel
-    eeg (str): EEG channel
-    emg (str): EMG channel
-    rgb_video (str): RGB video channel
-    temperature (str): Temperature channel
+    audio: Audio channel
+    bvp: BVP channel
+    chest_size: Chest size channel
+    depth_video: Depth video channel
+    ecg: Electrocardiography channel
+    eda: Electrodermal activity channel
+    eeg: Electroencephalography channel
+    emg: Electromyography channel
+    rgb_video: RGB video channel
+    temperature: Temperature channel
     """
 
-    audio = "Audio"
-    bvp = "BVP"
-    chest_size = "Chest size"
-    depth_video = "Depth video"
-    ecg = "ECG"
-    eda = "EDA"
-    eeg = "EEG"
-    emg = "EMG"
-    rgb_video = "RGB video"
-    temperature = "Temperature"
+    audio = ("Audio", "Audio channel")
+    bvp = ("BVP", "Blood Volume Pulse (BVP) channel")
+    chest_size = ("Chest size", "Chest size channel")
+    depth_video = ("Depth video", "Depth video channel")
+    ecg = ("ECG", "Electrocardiography channel")
+    eda = ("EDA", "Electrodermal activity channel")
+    eeg = ("EEG", "Electroencephalography channel")
+    emg = ("EMG", "Electromyography channel")
+    rgb_video = ("RGB video", "RGB video channel")
+    temperature = ("Temperature", "Temperature channel")
 
 
 class ChannelIn(BaseModel):
@@ -44,6 +44,7 @@ class ChannelIn(BaseModel):
     """
 
     type: str
+    description: str
 
 
 class BasicChannelOut(ChannelIn):

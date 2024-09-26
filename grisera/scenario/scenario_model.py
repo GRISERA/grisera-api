@@ -23,10 +23,12 @@ class ScenarioOut(BaseModelOut):
     Model of scenario to send to client as a result of request
 
     Attributes:
+        id (Union[int, str]): Id of scenario returned from api
         activity_executions (List[ActivityExecutionOut]): List of activity executions in scenario
         experiment (ExperimentOut): Experiment, the scenario belongs to
     """
 
+    id: Optional[Union[int, str]]
     activity_executions: "Optional[List[ActivityExecutionOut]]"
     experiment: "Optional[ExperimentOut]"
 
