@@ -38,14 +38,14 @@ class PersonalityRouter:
         response_model=PersonalityBigFiveOut,
     )
     async def create_personality_big_five(
-            self, personality: PersonalityBigFiveIn, response: Response, dataset_name: str
+            self, personality: PersonalityBigFiveIn, response: Response, dataset_id: Union[int, str]
     ):
         """
         Create personality big five model in database
         """
 
         create_response = self.personality_service.save_personality_big_five(
-            personality, dataset_name
+            personality, dataset_id
         )
 
         if create_response.errors is not None:
@@ -62,13 +62,13 @@ class PersonalityRouter:
         response_model=PersonalityPanasOut,
     )
     async def create_personality_panas(
-            self, personality: PersonalityPanasIn, response: Response, dataset_name: str
+            self, personality: PersonalityPanasIn, response: Response, dataset_id: Union[int, str]
     ):
         """
         Create personality panas model in database
         """
 
-        create_response = self.personality_service.save_personality_panas(personality, dataset_name)
+        create_response = self.personality_service.save_personality_panas(personality, dataset_id)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -85,7 +85,7 @@ class PersonalityRouter:
         ],
     )
     async def get_personality(
-            self, personality_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
+            self, personality_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0
     ):
 
         """
@@ -93,7 +93,7 @@ class PersonalityRouter:
         response.
         """
 
-        get_response = self.personality_service.get_personality(personality_id, dataset_name, depth)
+        get_response = self.personality_service.get_personality(personality_id, dataset_id, depth)
 
         if get_response.errors is not None:
             response.status_code = 404
@@ -104,12 +104,12 @@ class PersonalityRouter:
         return get_response
 
     @router.get("/personality", tags=["personality"], response_model=PersonalitiesOut)
-    async def get_personalities(self, response: Response, dataset_name: str):
+    async def get_personalities(self, response: Response, dataset_id: Union[int, str]):
         """
         Get personalities from database
         """
 
-        get_response = self.personality_service.get_personalities(dataset_name)
+        get_response = self.personality_service.get_personalities(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -124,12 +124,12 @@ class PersonalityRouter:
         ],
     )
     async def delete_personality(
-            self, personality_id: Union[int, str], response: Response, dataset_name: str
+            self, personality_id: Union[int, str], response: Response, dataset_id: Union[int, str]
     ):
         """
         Delete personality from database
         """
-        get_response = self.personality_service.delete_personality(personality_id, dataset_name)
+        get_response = self.personality_service.delete_personality(personality_id, dataset_id)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -147,13 +147,13 @@ class PersonalityRouter:
             self,
             personality_id: Union[int, str],
             personality: PersonalityBigFiveIn,
-            response: Response, dataset_name: str
+            response: Response, dataset_id: Union[int, str]
     ):
         """
         Update personality big five model in database
         """
         update_response = self.personality_service.update_personality_big_five(
-            personality_id, personality, dataset_name
+            personality_id, personality, dataset_id
         )
 
         if update_response.errors is not None:
@@ -175,13 +175,13 @@ class PersonalityRouter:
             self,
             personality_id: Union[int, str],
             personality: PersonalityPanasIn,
-            response: Response, dataset_name: str
+            response: Response, dataset_id: Union[int, str]
     ):
         """
         Update personality panas model in database
         """
         update_response = self.personality_service.update_personality_panas(
-            personality_id, personality, dataset_name
+            personality_id, personality, dataset_id
         )
 
         if update_response.errors is not None:

@@ -38,13 +38,13 @@ class ActivityExecutionRouter:
         response_model=ActivityExecutionOut,
     )
     async def create_activity_execution(
-            self, activity_execution: ActivityExecutionIn, response: Response, dataset_name: str
+            self, activity_execution: ActivityExecutionIn, response: Response, dataset_id: Union[int, str]
     ):
         """
         Create activity execution in database
         """
         create_response = self.activity_execution_service.save_activity_execution(
-            activity_execution, dataset_name
+            activity_execution, dataset_id
         )
 
         if create_response.errors is not None:
@@ -60,13 +60,13 @@ class ActivityExecutionRouter:
         tags=["activity executions"],
         response_model=ActivityExecutionsOut,
     )
-    async def get_activity_executions(self, response: Response, dataset_name: str):
+    async def get_activity_executions(self, response: Response, dataset_id: Union[int, str]):
 
         """
         Get activity executions from database
         """
 
-        get_response = self.activity_execution_service.get_activity_executions(dataset_name)
+        get_response = self.activity_execution_service.get_activity_executions(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -79,7 +79,7 @@ class ActivityExecutionRouter:
         response_model=Union[ActivityExecutionOut, NotFoundByIdModel],
     )
     async def get_activity_execution(
-            self, activity_execution_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0,
+            self, activity_execution_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0,
     ):
 
         """
@@ -88,7 +88,7 @@ class ActivityExecutionRouter:
         """
 
         get_response = self.activity_execution_service.get_activity_execution(
-            activity_execution_id, dataset_name, depth
+            activity_execution_id, dataset_id, depth
         )
 
         if get_response.errors is not None:
@@ -105,13 +105,13 @@ class ActivityExecutionRouter:
         response_model=Union[ActivityExecutionOut, NotFoundByIdModel],
     )
     async def delete_activity_execution(
-            self, activity_execution_id: Union[int, str], response: Response, dataset_name: str
+            self, activity_execution_id: Union[int, str], response: Response, dataset_id: Union[int, str]
     ):
         """
         Delete activity executions from database
         """
         get_response = self.activity_execution_service.delete_activity_execution(
-            activity_execution_id, dataset_name
+            activity_execution_id, dataset_id
         )
 
         if get_response.errors is not None:
@@ -131,13 +131,13 @@ class ActivityExecutionRouter:
             self,
             activity_execution_id: Union[int, str],
             activity_execution: ActivityExecutionPropertyIn,
-            response: Response, dataset_name: str
+            response: Response, dataset_id: Union[int, str]
     ):
         """
         Update activity execution model in database
         """
         update_response = self.activity_execution_service.update_activity_execution(
-            activity_execution_id, activity_execution, dataset_name
+            activity_execution_id, activity_execution, dataset_id
         )
 
         if update_response.errors is not None:
@@ -157,14 +157,14 @@ class ActivityExecutionRouter:
             self,
             activity_execution_id: Union[int, str],
             activity_execution: ActivityExecutionRelationIn,
-            response: Response, dataset_name: str
+            response: Response, dataset_id: Union[int, str]
     ):
         """
         Update activity executions relations in database
         """
         update_response = (
             self.activity_execution_service.update_activity_execution_relationships(
-                activity_execution_id, activity_execution, dataset_name
+                activity_execution_id, activity_execution, dataset_id
             )
         )
 

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 
 from grisera.dataset.dataset_model import DatasetIn
 
@@ -17,9 +17,12 @@ class DatasetService:
 
         raise Exception("save_database not implemented yet")
 
-    def get_datasets(self):
+    def get_datasets(self, dataset_ids: List[Union[int, str]]):
         """
-        Get all datasets
+        Get all datasets that you have access to
+
+        Args:
+            dataset_ids (List[Union[int, str]]): identity of datasets
 
         Returns:
             Result of request as list of dataset objects
@@ -28,7 +31,7 @@ class DatasetService:
 
     def get_dataset(self, dataset_id: Union[int, str]):
         """
-        Get dataset by name
+        Get dataset by id
 
         Args:
             dataset_id (int | str): identity of dataset
@@ -49,3 +52,14 @@ class DatasetService:
             Result of request as dataset object
         """
         raise Exception("delete_dataset not implemented yet")
+
+    def update_dataset(self, dataset_id: Union[int, str], dataset: DatasetIn):
+        """
+        Send request to grisera api to update given dataset
+        Args:
+            dataset_id (int | str): identity of dataset
+            dataset (DatasetIn): Dataset with new values to update
+        Returns:
+            Result of request as dataset object
+        """
+        raise Exception("update_dataset not implemented yet")

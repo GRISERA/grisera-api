@@ -36,12 +36,12 @@ class LifeActivityRouter:
         response_model=LifeActivityOut,
     )
     async def create_life_activity(
-            self, life_activity: LifeActivityIn, response: Response, dataset_name: str
+            self, life_activity: LifeActivityIn, response: Response, dataset_id: Union[int, str]
     ):
         """
         Create channel in database
         """
-        create_response = self.life_activity_service.save_life_activity(life_activity, dataset_name)
+        create_response = self.life_activity_service.save_life_activity(life_activity, dataset_id)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -56,7 +56,7 @@ class LifeActivityRouter:
         response_model=Union[LifeActivityOut, NotFoundByIdModel],
     )
     async def get_life_activity(
-            self, life_activity_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
+            self, life_activity_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0
     ):
 
         """
@@ -65,7 +65,7 @@ class LifeActivityRouter:
         """
 
         get_response = self.life_activity_service.get_life_activity(
-            life_activity_id, dataset_name, depth
+            life_activity_id, dataset_id, depth
         )
 
         if get_response.errors is not None:
@@ -79,13 +79,13 @@ class LifeActivityRouter:
     @router.get(
         "/life_activities", tags=["life activities"], response_model=LifeActivitiesOut
     )
-    async def get_life_activities(self, response: Response, dataset_name: str):
+    async def get_life_activities(self, response: Response, dataset_id: Union[int, str]):
 
         """
         Get life activities from database
         """
 
-        get_response = self.life_activity_service.get_life_activities(dataset_name)
+        get_response = self.life_activity_service.get_life_activities(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)

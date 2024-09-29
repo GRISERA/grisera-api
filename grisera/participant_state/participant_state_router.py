@@ -38,14 +38,14 @@ class ParticipantStateRouter:
         response_model=ParticipantStateOut,
     )
     async def create_participant_state(
-            self, participant_state: ParticipantStateIn, response: Response, dataset_name: str
+            self, participant_state: ParticipantStateIn, response: Response, dataset_id: Union[int, str]
     ):
         """
         Create participant state in database
         """
 
         create_response = self.participant_state_service.save_participant_state(
-            participant_state, dataset_name
+            participant_state, dataset_id
         )
         if create_response.errors is not None:
             response.status_code = 422
@@ -60,12 +60,12 @@ class ParticipantStateRouter:
         tags=["participant state"],
         response_model=ParticipantStatesOut,
     )
-    async def get_participant_states(self, response: Response, dataset_name: str):
+    async def get_participant_states(self, response: Response, dataset_id: Union[int, str]):
         """
         Get participant states from database
         """
 
-        get_response = self.participant_state_service.get_participant_states(dataset_name)
+        get_response = self.participant_state_service.get_participant_states(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -78,7 +78,7 @@ class ParticipantStateRouter:
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def get_participant_state(
-            self, participant_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
+            self, participant_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0
     ):
         """
         Get participant state from database. Depth attribute specifies how many models will be traversed to create the
@@ -86,7 +86,7 @@ class ParticipantStateRouter:
         """
 
         get_response = self.participant_state_service.get_participant_state(
-            participant_id, dataset_name, depth
+            participant_id, dataset_id, depth
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -102,13 +102,13 @@ class ParticipantStateRouter:
         response_model=Union[ParticipantStateOut, NotFoundByIdModel],
     )
     async def delete_participant_state(
-            self, participant_state_id: Union[int, str], response: Response, dataset_name: str
+            self, participant_state_id: Union[int, str], response: Response, dataset_id: Union[int, str]
     ):
         """
         Delete participant state from database
         """
         get_response = self.participant_state_service.delete_participant_state(
-            participant_state_id, dataset_name
+            participant_state_id, dataset_id
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -128,13 +128,13 @@ class ParticipantStateRouter:
             participant_state_id: Union[int, str],
             participant_state: ParticipantStatePropertyIn,
             response: Response,
-            dataset_name: str
+            dataset_id: Union[int, str]
     ):
         """
         Update participant state model in database
         """
         update_response = self.participant_state_service.update_participant_state(
-            participant_state_id, participant_state, dataset_name
+            participant_state_id, participant_state, dataset_id
         )
         if update_response.errors is not None:
             response.status_code = 404
@@ -154,14 +154,14 @@ class ParticipantStateRouter:
             participant_state_id: Union[int, str],
             participant_state: ParticipantStateRelationIn,
             response: Response,
-            dataset_name: str
+            dataset_id: Union[int, str]
     ):
         """
         Update participant state relations in database
         """
         update_response = (
             self.participant_state_service.update_participant_state_relationships(
-                participant_state_id, participant_state, dataset_name
+                participant_state_id, participant_state, dataset_id
             )
         )
         if update_response.errors is not None:

@@ -33,11 +33,11 @@ class RecordingRouter:
         self.recording_service = service_factory.get_recording_service()
 
     @router.post("/recordings", tags=["recordings"], response_model=RecordingOut)
-    async def create_recording(self, recording: RecordingIn, response: Response, dataset_name: str):
+    async def create_recording(self, recording: RecordingIn, response: Response, dataset_id: Union[int, str]):
         """
         Create Recording in database
         """
-        create_response = self.recording_service.save_recording(recording, dataset_name)
+        create_response = self.recording_service.save_recording(recording, dataset_id)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -47,12 +47,12 @@ class RecordingRouter:
         return create_response
 
     @router.get("/recordings", tags=["recordings"], response_model=RecordingsOut)
-    async def get_recordings(self, response: Response, dataset_name: str):
+    async def get_recordings(self, response: Response, dataset_id: Union[int, str]):
         """
         Get recordings from database
         """
 
-        get_response = self.recording_service.get_recordings(dataset_name)
+        get_response = self.recording_service.get_recordings(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -65,14 +65,14 @@ class RecordingRouter:
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
     async def get_recording(
-            self, recording_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
+            self, recording_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0
     ):
         """
         Get recordings from database. Depth attribute specifies how many models will be traversed to create the
         response.
         """
 
-        get_response = self.recording_service.get_recording(recording_id, dataset_name, depth)
+        get_response = self.recording_service.get_recording(recording_id, dataset_id, depth)
 
         if get_response.errors is not None:
             response.status_code = 404
@@ -87,11 +87,11 @@ class RecordingRouter:
         tags=["recordings"],
         response_model=Union[RecordingOut, NotFoundByIdModel],
     )
-    async def delete_recording(self, recording_id: Union[int, str], response: Response, dataset_name: str):
+    async def delete_recording(self, recording_id: Union[int, str], response: Response, dataset_id: Union[int, str]):
         """
         Delete recordings from database
         """
-        get_response = self.recording_service.delete_recording(recording_id, dataset_name)
+        get_response = self.recording_service.delete_recording(recording_id, dataset_id)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -109,13 +109,13 @@ class RecordingRouter:
             self,
             recording_id: Union[int, str],
             recording: RecordingPropertyIn,
-            response: Response, dataset_name: str
+            response: Response, dataset_id: Union[int, str]
     ):
         """
         Update recording model in database
         """
         update_response = self.recording_service.update_recording(
-            recording_id, recording, dataset_name
+            recording_id, recording, dataset_id
         )
 
         if update_response.errors is not None:
@@ -135,13 +135,13 @@ class RecordingRouter:
             self,
             recording_id: Union[int, str],
             recording: RecordingRelationIn,
-            response: Response, dataset_name: str
+            response: Response, dataset_id: Union[int, str]
     ):
         """
         Update recordings relations in database
         """
         update_response = self.recording_service.update_recording_relationships(
-            recording_id, recording, dataset_name
+            recording_id, recording, dataset_id
         )
 
         if update_response.errors is not None:

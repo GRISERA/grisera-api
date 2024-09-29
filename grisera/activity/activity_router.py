@@ -28,11 +28,11 @@ class ActivityRouter:
         self.activity_service = service_factory.get_activity_service()
 
     @router.post("/activities", tags=["activities"], response_model=ActivityOut)
-    async def create_activity(self, activity: ActivityIn, response: Response, dataset_name: str):
+    async def create_activity(self, activity: ActivityIn, response: Response, dataset_id: Union[int, str]):
         """
         Create activity in dataset
         """
-        create_response = self.activity_service.save_activity(activity, dataset_name)
+        create_response = self.activity_service.save_activity(activity, dataset_id)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -43,11 +43,11 @@ class ActivityRouter:
 
     @router.get("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel], )
-    async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0):
+    async def get_activity(self, activity_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0):
         """
         Get activity from database. Depth attribute specifies how many models will be traversed to create the response.
         """
-        get_response = self.activity_service.get_activity(activity_id, dataset_name, depth)
+        get_response = self.activity_service.get_activity(activity_id, dataset_id, depth)
 
         if get_response.errors is not None:
             response.status_code = 404
@@ -58,12 +58,12 @@ class ActivityRouter:
         return get_response
 
     @router.get("/activities", tags=["activities"], response_model=ActivitiesOut)
-    async def get_activities(self, response: Response, dataset_name: str):
+    async def get_activities(self, response: Response, dataset_id: Union[int, str]):
         """
         Get activities from dataset
         """
 
-        get_response = self.activity_service.get_activities(dataset_name)
+        get_response = self.activity_service.get_activities(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -72,11 +72,11 @@ class ActivityRouter:
 
     @router.delete("/activities/{activity_id}", tags=["activities"],
                    response_model=Union[ActivityOut, NotFoundByIdModel])
-    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_name: str):
+    async def delete_activity(self, activity_id: Union[int, str], response: Response, dataset_id: Union[int, str]):
         """
         Delete activity from dataset
         """
-        get_response = self.activity_service.delete_activity(activity_id, dataset_name)
+        get_response = self.activity_service.delete_activity(activity_id, dataset_id)
         if get_response.errors is not None:
             response.status_code = 404
 
@@ -88,11 +88,11 @@ class ActivityRouter:
     @router.put("/activities/{activity_id}", tags=["activities"],
                 response_model=Union[ActivityOut, NotFoundByIdModel])
     async def update_activity(self, activity_id: Union[int, str], activity: ActivityIn, response: Response,
-                              dataset_name: str):
+                              dataset_id: Union[int, str]):
         """
         Update activity model in dataset
         """
-        update_response = self.activity_service.update_activity(activity_id, activity, dataset_name)
+        update_response = self.activity_service.update_activity(activity_id, activity, dataset_id)
         if update_response.errors is not None:
             response.status_code = 404
 

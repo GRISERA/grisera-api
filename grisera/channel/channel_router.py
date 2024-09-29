@@ -31,11 +31,11 @@ class ChannelRouter:
         tags=["channels"],
         response_model=ChannelOut,
     )
-    async def create_channel(self, channel: ChannelIn, response: Response, dataset_name: str):
+    async def create_channel(self, channel: ChannelIn, response: Response, dataset_id: Union[int, str]):
         """
         Create channel in database
         """
-        create_response = self.channel_service.save_channel(channel, dataset_name)
+        create_response = self.channel_service.save_channel(channel, dataset_id)
         if create_response.errors is not None:
             response.status_code = 422
 
@@ -50,14 +50,14 @@ class ChannelRouter:
         response_model=Union[ChannelOut, NotFoundByIdModel],
     )
     async def get_channel(
-            self, channel_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0,
+            self, channel_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0,
     ):
 
         """
         Get channel from database. Depth attribute specifies how many models will be traversed to create the response.
         """
 
-        get_response = self.channel_service.get_channel(channel_id, dataset_name, depth)
+        get_response = self.channel_service.get_channel(channel_id, dataset_id, depth)
 
         if get_response.errors is not None:
             response.status_code = 404
@@ -68,12 +68,12 @@ class ChannelRouter:
         return get_response
 
     @router.get("/channels", tags=["channels"], response_model=ChannelsOut)
-    async def get_channels(self, response: Response, dataset_name: str):
+    async def get_channels(self, response: Response, dataset_id: Union[int, str]):
         """
         Get channels from database
         """
 
-        get_response = self.channel_service.get_channels(dataset_name)
+        get_response = self.channel_service.get_channels(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)

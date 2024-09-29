@@ -1,4 +1,5 @@
 from fastapi import Request, Depends, HTTPException
+from typing import Union
 
 from grisera.auth.auth_bearer import JWTBearer
 from grisera.auth.auth_module import Roles
@@ -19,11 +20,11 @@ def create_stub_from_response(response, id_key='id', properties=None):
     return stub
 
 
-def check_dataset_permission(request: Request, dataset_name: str, token=Depends(JWTBearer())):
+def check_dataset_permission(request: Request, dataset_id: Union[int, str], token=Depends(JWTBearer())):
     for permission in token['permissions']:
-        if str(permission['datasetId']) == dataset_name:
+        if str(permission['datasetId']) == str(dataset_id):
             if (not request.method == "GET") and (str(permission['role']) == Roles.reader):
                 raise HTTPException(status_code=403, detail="Invalid permission level to dataset")
-            return dataset_name
+            return dataset_id
 
     raise HTTPException(status_code=403, detail="Invalid authentication to dataset")

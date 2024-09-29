@@ -36,14 +36,14 @@ class ObservableInformationRouter:
         response_model=ObservableInformationOut,
     )
     async def create_observable_information(
-            self, observable_information: ObservableInformationIn, response: Response, dataset_name: str
+            self, observable_information: ObservableInformationIn, response: Response, dataset_id: Union[int, str]
     ):
         """
         Create observable information in database
         """
         create_response = (
             self.observable_information_service.save_observable_information(
-                observable_information, dataset_name
+                observable_information, dataset_id
             )
         )
         if create_response.errors is not None:
@@ -59,12 +59,12 @@ class ObservableInformationRouter:
         tags=["observable information"],
         response_model=ObservableInformationsOut,
     )
-    async def get_observable_informations(self, response: Response, dataset_name: str):
+    async def get_observable_informations(self, response: Response, dataset_id: Union[int, str]):
         """
         Get observable information from database
         """
 
-        get_response = self.observable_information_service.get_observable_informations(dataset_name)
+        get_response = self.observable_information_service.get_observable_informations(dataset_id)
 
         # add links from hateoas
         get_response.links = get_links(router)
@@ -77,7 +77,7 @@ class ObservableInformationRouter:
         response_model=Union[ObservableInformationOut, NotFoundByIdModel],
     )
     async def get_observable_information(
-            self, observable_information_id: Union[int, str], response: Response, dataset_name: str, depth: int = 0
+            self, observable_information_id: Union[int, str], response: Response, dataset_id: Union[int, str], depth: int = 0
     ):
         """
         Get observable information from database. Depth attribute specifies how many models will be traversed to create
@@ -85,7 +85,7 @@ class ObservableInformationRouter:
         """
 
         get_response = self.observable_information_service.get_observable_information(
-            observable_information_id, dataset_name, depth
+            observable_information_id, dataset_id, depth
         )
         if get_response.errors is not None:
             response.status_code = 404
@@ -101,7 +101,7 @@ class ObservableInformationRouter:
         response_model=Union[ObservableInformationOut, NotFoundByIdModel],
     )
     async def delete_observable_information(
-            self, observable_information_id: Union[int, str], response: Response, dataset_name: str
+            self, observable_information_id: Union[int, str], response: Response, dataset_id: Union[int, str]
     ):
         """
         Delete observable information from database
@@ -109,7 +109,7 @@ class ObservableInformationRouter:
         get_response = (
             self.observable_information_service.delete_observable_information(
                 observable_information_id,
-                dataset_name
+                dataset_id
             )
         )
         if get_response.errors is not None:
@@ -130,14 +130,14 @@ class ObservableInformationRouter:
             observable_information_id: Union[int, str],
             observable_information: ObservableInformationIn,
             response: Response,
-            dataset_name: str
+            dataset_id: Union[int, str]
     ):
 
         """
         Update observable information relations in database
         """
         update_response = self.observable_information_service.update_observable_information_relationships(
-            observable_information_id, observable_information, dataset_name
+            observable_information_id, observable_information, dataset_id
         )
         if update_response.errors is not None:
             response.status_code = 404
