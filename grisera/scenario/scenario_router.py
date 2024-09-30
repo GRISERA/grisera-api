@@ -49,6 +49,20 @@ class ScenarioRouter:
 
         return create_response
 
+    @router.post("/scenarios/{scenario_id}", tags=["scenarios"], response_model=Union[ScenarioOut, NotFoundByIdModel])
+    async def create_scenario_execution(self, scenario_id: Union[int, str], scenario: ScenarioIn, response: Response, dataset_id: Union[int, str]):
+        """
+        Create scenario in database
+        """
+        create_response = self.scenario_service.add_scenario_execution(scenario_id, scenario, dataset_id)
+        if create_response.errors is not None:
+            response.status_code = 422
+
+        # add links from hateoas
+        create_response.links = get_links(router)
+
+        return create_response
+
     @router.post(
         "/scenarios/{previous_id}",
         tags=["scenarios"],
@@ -87,6 +101,20 @@ class ScenarioRouter:
         put_response.links = get_links(router)
 
         return put_response
+
+    @router.put("/scenarios/{scenario_id}", tags=["scenarios"], response_model=Union[ScenarioOut, NotFoundByIdModel])
+    async def update_scenario(self, scenario_id: Union[int, str], scenario: ScenarioIn, response: Response, dataset_id: Union[int, str]):
+        """
+        Change order of one activity execution in scenario
+        """
+        update_response = self.scenario_service.update_scenario(scenario_id, scenario, dataset_id)
+        if update_response.errors is not None:
+            response.status_code = 422
+
+        # add links from hateoas
+        update_response.links = get_links(router)
+
+        return update_response
 
     @router.delete(
         "/scenarios/{activity_execution_id}",

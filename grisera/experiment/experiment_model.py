@@ -35,10 +35,10 @@ class ExperimentOut(BasicExperimentOut, BaseModelOut):
     Model of experiment with relationships to send to client as a result of request
 
     Attributes:
-    activity_executions (Optional[ActivityExecutionOut]): activity_executions related to this experiment
+    scenarios (Optional[List[ScenarioOut]]): scenarios related to this experiment
     """
 
-    activity_executions: "Optional[ActivityExecutionOut]"
+    scenarios: "Optional[List[ScenarioOut]]"
 
 
 class ExperimentsOut(BaseModelOut):
@@ -53,6 +53,6 @@ class ExperimentsOut(BaseModelOut):
 
 
 # Circular import exception prevention
-from grisera.activity_execution.activity_execution_model import ActivityExecutionOut
+from grisera.scenario.scenario_model import ScenarioOut
 
 ExperimentOut.update_forward_refs()

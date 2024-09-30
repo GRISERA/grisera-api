@@ -12,9 +12,37 @@ class ScenarioService:
 
     def save_scenario(self, scenario: ScenarioIn, dataset_id: Union[int, str]):
         """
-        Send request to graph api to create new scenario
+        Send request to grisera api to create new scenario
 
         Args:
+            scenario (ScenarioIn): Scenario to be added
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as scenario object
+        """
+        raise Exception("save_scenario not implemented yet")
+
+    def add_scenario_execution(self, scenario_id: Union[int, str], scenario: ScenarioIn, dataset_id: Union[int, str]):
+        """
+        Send request to grisera api to add scenario_execution to scenario
+
+        Args:
+            scenario_id (int | str): id of scenario to add scenario_execution to
+            scenario (ScenarioIn): Scenario to be added
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as activity_execution object
+        """
+        raise Exception("add_activity_execution not implemented yet")
+
+    def update_scenario(self, scenario_id: Union[int, str], scenario: ScenarioIn, dataset_id: Union[int, str]):
+        """
+        Send request to grisera api to create new scenario
+
+        Args:
+            scenario_id (int | str): id of scenario to add scenario_execution to
             scenario (ScenarioIn): Scenario to be added
             dataset_id (int | str): name of dataset
 
@@ -136,6 +164,20 @@ class ScenarioService:
         raise Exception("get_scenario not implemented yet")
 
     def get_scenario_by_experiment(self, experiment_id: Union[int, str], dataset_id: Union[int, str], depth: int = 0):
+        """
+        Send request to graph api to get activity_executions from scenario which starts in experiment
+
+        Args:
+            experiment_id (int | str): identity of experiment where scenario starts
+            depth: (int): specifies how many related entities will be traversed to create the response
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as Scenario object
+        """
+        raise Exception("get_scenario_by_experiment not implemented yet")
+
+    def get_scenarios_by_experiment(self, experiment_id: Union[int, str], dataset_id: Union[int, str], depth: int = 0):
         """
         Send request to graph api to get activity_executions from scenario which starts in experiment
 
