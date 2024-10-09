@@ -87,13 +87,13 @@ class TimeSeriesRouter:
     @router.get("/time_series", tags=["time series"], response_model=TimeSeriesNodesOut)
     async def get_time_series_nodes(self, response: Response, dataset_id: Union[int, str], request: Request,
                                     entityname_property_name: Optional[str] = None,
-                                    experiment_id: Optional[int] = None,
-                                    participant_id: Optional[int] = None,
+                                    experiment_id: Union[int, str] = None,
+                                    participant_id: Union[int, str] = None,
                                     participant_date_of_birth: Optional[str] = None,
                                     participant_sex: Optional[str] = None,
                                     participant_name: Optional[str] = None,
                                     participantstate_age: Optional[str] = None,
-                                    recording_id: Optional[int] = None,
+                                    recording_id: Union[int, str] = None,
                                     recording_source: Optional[str] = None):
         """
         Get time series from database.
@@ -165,7 +165,7 @@ class TimeSeriesRouter:
             response.status_code = 422
             return TimeSeriesMultidimensionalOut(errors="Ids must be integers")
 
-        get_response = self.time_series_service.get_time_series_multidimensional(ids)
+        get_response = self.time_series_service.get_time_series_multidimensional(ids, dataset_id)
         if get_response.errors is not None:
             response.status_code = 404
 

@@ -149,6 +149,19 @@ class ScenarioService:
         """
         raise Exception("delete_activity_execution not implemented yet")
 
+    def delete_scenario_execution(self, scenario_execution_id: Union[int, str], dataset_id: Union[int, str]):
+        """
+        Send request to graph api to delete scenario_execution from scenario
+
+        Args:
+            scenario_execution_id (int | str): identity of activity_execution to delete
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as scenario object
+        """
+        raise Exception("delete_activity_execution not implemented yet")
+
     def get_scenario(self, element_id: Union[int, str], dataset_id: Union[int, str], depth: int = 0):
         """
         Send request to graph api to get activity executions and experiment from scenario

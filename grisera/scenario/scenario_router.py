@@ -64,7 +64,7 @@ class ScenarioRouter:
         return create_response
 
     @router.post(
-        "/scenarios/{previous_id}",
+        "/scenarios/add_activity_execution/{previous_id}",
         tags=["scenarios"],
         response_model=ActivityExecutionOut,
     )
@@ -117,7 +117,30 @@ class ScenarioRouter:
         return update_response
 
     @router.delete(
-        "/scenarios/{activity_execution_id}",
+        "/scenarios/{scenario_execution_id}",
+        tags=["scenarios"],
+        response_model=ScenarioOut,
+    )
+    async def delete_scenario_execution(
+            self, scenario_execution_id: Union[int, str], response: Response, dataset_id: Union[int, str]
+    ):
+        """
+        Delete activity execution from scenario
+        """
+        delete_response = self.scenario_service.delete_scenario_execution(
+            scenario_execution_id, dataset_id
+        )
+        if delete_response.errors is not None:
+            response.status_code = 404
+
+        # add links from hateoas
+        delete_response.links = get_links(router)
+
+        return delete_response
+
+
+    @router.delete(
+        "/scenarios/delete_activity_execution/{activity_execution_id}",
         tags=["scenarios"],
         response_model=ActivityExecutionOut,
     )

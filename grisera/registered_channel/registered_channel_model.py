@@ -41,7 +41,7 @@ class RegisteredChannelOut(BasicRegisteredChannelOut, BaseModelOut):
 
     recordings: "Optional[List[RecordingOut]]"
     channel: "Optional[ChannelOut]"
-    registeredData: "Optional[RegisteredDataOut]"
+    registered_data: "Optional[RegisteredDataOut]"
 
 
 class RegisteredChannelsOut(BaseModelOut):

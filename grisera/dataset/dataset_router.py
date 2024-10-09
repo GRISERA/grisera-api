@@ -16,6 +16,7 @@ from grisera.measure_name.measure_name_model import MeasureName as measure_name_
 from grisera.measure.measure_model import Measure as measure_type, MeasureIn
 from grisera.life_activity.life_activity_model import LifeActivityIn
 from grisera.modality.modality_model import Modality as modality_types
+from grisera.arrangement.arrangement_model import Arrangement as arrangement_types, ArrangementIn
 from grisera.modality.modality_model import ModalityIn
 from grisera.models.not_found_model import NotFoundByIdModel
 from grisera.services.service import service
@@ -40,6 +41,7 @@ class DatasetRouter:
         self.life_activity_service = service_factory.get_life_activity_service()
         self.measure_name_service = service_factory.get_measure_name_service()
         self.measure_service = service_factory.get_measure_service()
+        self.arrangement_service = service_factory.get_arrangement_service()
 
     @router.post("/datasets", tags=["datasets"], response_model=DatasetOut)
     async def create_dataset(self, response: Response, dataset: DatasetIn):
@@ -67,6 +69,10 @@ class DatasetRouter:
         # create life activities nodes for the dataset
         for life_activity_type in life_activity_types:
             create_life_activity_response = self.life_activity_service.save_life_activity(LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.id)
+
+        # create arrangement nodes for the dataset
+        for arrangement_type in arrangement_types:
+            create_arrangement_response = self.arrangement_service.save_arrangement(ArrangementIn(arrangement_type=arrangement_type.value[0], arrangement_distance=arrangement_type.value[1]), create_dataset_response.id)
 
         # create measures and measure names nodes for the dataset
         for measure_name_type in measure_name_types:
