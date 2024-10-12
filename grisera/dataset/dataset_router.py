@@ -58,7 +58,7 @@ class DatasetRouter:
         # wait for the dataset to be created
         time.sleep(0.5)
 
-        # # create channels nodes for the dataset
+        # create channels nodes for the dataset
         for channel_type in channel_types:
             create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value[0], description=channel_type.value[1]), create_dataset_response.id)
 
