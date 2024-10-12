@@ -1,5 +1,5 @@
-from typing import Optional, Union, List
 from enum import Enum
+from typing import Optional, Union, List
 
 from pydantic import BaseModel
 
@@ -25,18 +25,18 @@ class MeasureName(tuple, Enum):
     valence (tuple): Valence
     """
 
-    familiarity = ("Familiarity", "Addional emotions measure")
-    liking = ("Liking", "Ekman model measure")
-    anger = ("Anger", "Ekman model measure")
-    disgust = ("Disgust", "Ekman model measure")
-    fear = ("Fear", "Ekman model measure")
-    happiness = ("Happiness", "Ekman model measure")
-    sadness = ("Sadness", "Ekman model measure")
-    surprise = ("Surprise", "Ekman model measure")
-    neutral_state = ("Neutral state", "Neutral state measure")
-    dominance = ("Dominance", "PAD model measure")
-    arousal = ("Arousal", "PAD model measure")
-    valence = ("Valence", "PAD model measure")
+    familiarity = ("Familiarity", "User defined")
+    liking = ("Liking", "Ekman")
+    anger = ("Anger", "Ekman")
+    disgust = ("Disgust", "Ekman")
+    fear = ("Fear", "Ekman")
+    happiness = ("Happiness", "Ekman")
+    sadness = ("Sadness", "Ekman")
+    surprise = ("Surprise", "Ekman")
+    neutral_state = ("Neutral state", "Neutral")
+    dominance = ("Dominance", "PAD")
+    arousal = ("Arousal", "PAD")
+    valence = ("Valence", "PAD")
 
 
 class MeasureNameIn(BaseModel):
@@ -54,7 +54,7 @@ class MeasureNameIn(BaseModel):
 
 class BasicMeasureNameOut(MeasureNameIn):
     """
-    Model of measure name in database
+    Model of measure name in dataset
 
     Attributes:
     id (Optional[Union[int, str]]): Id of measure name returned from api

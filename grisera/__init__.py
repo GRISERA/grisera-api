@@ -14,9 +14,13 @@ from .arrangement.arrangement_model import *
 from .arrangement.arrangement_router import ArrangementRouter, router as arrangement_router
 from .arrangement.arrangement_service import ArrangementService
 
-from .channel.channel_model import Type as ChannelType, ChannelIn, BasicChannelOut, ChannelOut, ChannelsOut
+from .channel.channel_model import Types as ChannelType, ChannelIn, BasicChannelOut, ChannelOut, ChannelsOut
 from .channel.channel_router import ChannelRouter, router as channel_router
 from .channel.channel_service import ChannelService
+
+from .dataset.dataset_model import *
+from .dataset.dataset_router import DatasetRouter, router as dataset_router
+from .dataset.dataset_service import DatasetService
 
 from .experiment.experiment_model import *
 from .experiment.experiment_router import ExperimentRouter, router as experiment_router

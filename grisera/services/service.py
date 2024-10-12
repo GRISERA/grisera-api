@@ -1,5 +1,6 @@
 from grisera.services.not_implemented_service_factory import NotImplementedServiceFactory
 
+
 class Service:
     def __new__(cls):
         if not hasattr(cls, "instance"):

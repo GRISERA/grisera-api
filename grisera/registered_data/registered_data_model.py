@@ -2,8 +2,8 @@ from typing import List, Union, Optional
 
 from pydantic import BaseModel
 
-from grisera.property.property_model import PropertyIn
 from grisera.models.base_model_out import BaseModelOut
+from grisera.property.property_model import PropertyIn
 
 
 class RegisteredDataIn(BaseModel):

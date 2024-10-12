@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from typing import Optional, Any, Union
+
+from pydantic import BaseModel
 
 
 class NotFoundByIdModel(BaseModel):

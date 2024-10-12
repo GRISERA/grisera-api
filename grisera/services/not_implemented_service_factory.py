@@ -3,6 +3,7 @@ from grisera.activity_execution.activity_execution_service import ActivityExecut
 from grisera.appearance.appearance_service import AppearanceService
 from grisera.arrangement.arrangement_service import ArrangementService
 from grisera.channel.channel_service import ChannelService
+from grisera.dataset.dataset_service import DatasetService
 from grisera.experiment.experiment_service import ExperimentService
 from grisera.life_activity.life_activity_service import LifeActivityService
 from grisera.measure.measure_service import MeasureService
@@ -17,9 +18,14 @@ from grisera.recording.recording_service import RecordingService
 from grisera.registered_channel.registered_channel_service import RegisteredChannelService
 from grisera.registered_data.registered_data_service import RegisteredDataService
 from grisera.scenario.scenario_service import ScenarioService
-from grisera.time_series.time_series_service import TimeSeriesService
 from grisera.services.service_factory import ServiceFactory
+from grisera.time_series.time_series_service import TimeSeriesService
+
+
 class NotImplementedServiceFactory(ServiceFactory):
+    def get_dataset_service(self) -> DatasetService:
+        pass
+
     def get_activity_service(self) -> ActivityService:
         pass
 

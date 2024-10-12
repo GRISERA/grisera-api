@@ -1,8 +1,41 @@
+from enum import Enum
 from typing import Optional, Union, List
 
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+
+class Measure(tuple, Enum):
+    """
+    Names of measures with their datatypes
+
+    Attributes:
+    familiarity (tuple): Familiarity
+    liking (tuple): Liking
+    anger (tuple): Anger
+    disgust (tuple): Disgust
+    fear (tuple): Fear
+    happiness (tuple): Happiness
+    sadness (tuple): Sadness
+    surprise (tuple): Surprise
+    neutral_state (tuple): Neutral state
+    dominance (tuple): Dominance
+    arousal (tuple): Arousal
+    valence (tuple): Valence
+    """
+
+    familiarity = ("Familiarity", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    liking = ("Liking", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    anger = ("Anger", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    disgust = ("Disgust", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    fear = ("Fear", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    happiness = ("Happiness", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    sadness = ("Sadness", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    surprise = ("Surprise", "string", None, None, ["Absent", "Mild", "Moderate", "Intense"])
+    neutral_state = ("Neutral state", "string", None, None, ["Neutral"])
+    dominance = ("Dominance", "string", None, None, ["Low", "Moderate", "High"])
+    arousal = ("Arousal", "string", None, None, ["Low", "Moderate", "High"])
+    valence = ("Valence", "string", None, None, ["Low", "Moderate", "High"])
 
 
 class MeasurePropertyIn(BaseModel):
@@ -11,13 +44,15 @@ class MeasurePropertyIn(BaseModel):
 
     Attributes:
     datatype (str): Type of data
-    range (str): Range of measure
-    unit (str): Datatype property which allows for defining unit of measure
+    range (Optional[str]): Range of measure
+    unit (Optional[str]): Datatype property which allows for defining unit of measure
+    values (Optional[List[str]]): list of available values for measure
     """
 
     datatype: str
-    range: str
+    range: Optional[str]
     unit: Optional[str]
+    values: Optional[List[str]]
 
 
 class MeasureRelationIn(BaseModel):
@@ -37,7 +72,7 @@ class MeasureIn(MeasurePropertyIn, MeasureRelationIn):
     """
 
 
-class BasicMeasureOut(MeasurePropertyIn):
+class BasicMeasureOut(MeasureIn):
     """
     Basic model of measure
 

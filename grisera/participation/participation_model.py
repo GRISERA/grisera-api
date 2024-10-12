@@ -18,7 +18,7 @@ class ParticipationIn(BaseModel):
     participant_state_id: Optional[Union[int, str]]
 
 
-class BasicParticipationOut(BaseModel):
+class BasicParticipationOut(ParticipationIn):
     """
     Basic model of participation
 

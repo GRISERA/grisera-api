@@ -1,5 +1,5 @@
-from typing import Optional, Union, List
 from enum import Enum
+from typing import Optional, Union, List
 
 from pydantic import BaseModel
 
@@ -39,7 +39,7 @@ class ArrangementIn(BaseModel):
 
 class BasicArrangementOut(ArrangementIn):
     """
-    Model of arrangement in database
+    Model of arrangement in dataset
 
     Attributes:
     id (Optional[Union[int, str]]): Id of arrangement returned from api
@@ -64,7 +64,8 @@ class ArrangementsOut(BaseModelOut):
     Model of arrangements to send to client as a result of request
 
     Attributes:
-    arrangement_types (List[BasicArrangementOut]): Arrangement types from database
+
+    arrangement_types (List[BasicArrangementOut]): Arrangement types from dataset
     """
 
     arrangements: List[BasicArrangementOut] = []

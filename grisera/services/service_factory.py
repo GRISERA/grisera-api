@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from grisera.activity.activity_service import ActivityService
 from grisera.activity_execution.activity_execution_service import ActivityExecutionService
 from grisera.appearance.appearance_service import AppearanceService
 from grisera.arrangement.arrangement_service import ArrangementService
 from grisera.channel.channel_service import ChannelService
+from grisera.dataset.dataset_service import DatasetService
 from grisera.experiment.experiment_service import ExperimentService
 from grisera.life_activity.life_activity_service import LifeActivityService
 from grisera.measure.measure_service import MeasureService
@@ -42,6 +43,10 @@ class ServiceFactory():
 
     @abstractmethod
     def get_channel_service(self) -> ChannelService:
+        pass
+
+    @abstractmethod
+    def get_dataset_service(self) -> DatasetService:
         pass
 
     @abstractmethod

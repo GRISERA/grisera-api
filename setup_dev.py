@@ -34,7 +34,8 @@ setup(
         'requests~=2.28.2',
         'fastapi-utils',
         'pydantic~=1.10.6',
-        'starlette~=0.26.1'
+        'starlette~=0.26.1',
+        'pyjwt'
     ],
     classifiers=[
         "Development Status :: 1 - Planning",
