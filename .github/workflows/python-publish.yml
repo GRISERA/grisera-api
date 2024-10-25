@@ -10,7 +10,7 @@ name: Upload Python Package
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "development_1.x" ]
 
 permissions:
   contents: read
@@ -36,7 +36,7 @@ jobs:
       uses: anothrNick/github-tag-action@1.61.0
       env:
         GITHUB_TOKEN: ${{ secrets.THIS_GITHUB_TOKEN }}
-        DEFAULT_BRANCH: main
+        DEFAULT_BRANCH: ${{ github.ref_name }}
         DEFAULT_BUMP: minor
         WITH_V: false
     - name: Build and publish
