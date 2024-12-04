@@ -42,6 +42,7 @@ class DatasetRouter:
         self.measure_name_service = service_factory.get_measure_name_service()
         self.measure_service = service_factory.get_measure_service()
         self.arrangement_service = service_factory.get_arrangement_service()
+        self.permissions_service = service_factory.get_permissions_service()
 
     @router.post("/datasets", tags=["datasets"], response_model=DatasetOut)
     async def create_dataset(self, response: Response, dataset: DatasetIn):
@@ -103,8 +104,10 @@ class DatasetRouter:
         Get all datasets
         """
         dataset_ids = []
-        # for permission in token['permissions']: //TODO
-        #     dataset_ids.append(str(permission['datasetId']))
+        user_id = token['sub']
+        permissions = self.permissions_service.get_permissions(user_id)
+        for permission in permissions:
+            dataset_ids.append(str(permission['datasetId']))
         get_response = self.dataset_service.get_datasets(dataset_ids)
         if get_response.errors is not None:
             response.status_code = 422

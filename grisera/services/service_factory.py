@@ -15,6 +15,7 @@ from grisera.observable_information.observable_information_service import Observ
 from grisera.participant.participant_service import ParticipantService
 from grisera.participant_state.participant_state_service import ParticipantStateService
 from grisera.participation.participation_service import ParticipationService
+from grisera.permission.permission_service import PermissionService
 from grisera.personality.personality_service import PersonalityService
 from grisera.recording.recording_service import RecordingService
 from grisera.registered_channel.registered_channel_service import RegisteredChannelService
@@ -107,4 +108,8 @@ class ServiceFactory():
 
     @abstractmethod
     def get_time_series_service(self) -> TimeSeriesService:
+        pass
+
+    @abstractmethod
+    def get_permissions_service(self) -> PermissionService:
         pass

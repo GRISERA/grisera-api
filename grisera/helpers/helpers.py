@@ -21,7 +21,8 @@ def create_stub_from_response(response, id_key='id', properties=None):
 
 
 def check_dataset_permission(request: Request, dataset_id: Union[int, str], token=Depends(JWTBearer())):
-    for permission in token['permissions']:
+    #TODO: Check permission using permission service
+    for permission in token['permission']:
         if str(permission['datasetId']) == str(dataset_id):
             if (not request.method == "GET") and (str(permission['role']) == Roles.reader):
                 raise HTTPException(status_code=403, detail="Invalid permission level to dataset")
