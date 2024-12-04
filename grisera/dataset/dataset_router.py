@@ -103,8 +103,8 @@ class DatasetRouter:
         Get all datasets
         """
         dataset_ids = []
-        for permission in token['permissions']:
-            dataset_ids.append(str(permission['datasetId']))
+        # for permission in token['permissions']: //TODO
+        #     dataset_ids.append(str(permission['datasetId']))
         get_response = self.dataset_service.get_datasets(dataset_ids)
         if get_response.errors is not None:
             response.status_code = 422
