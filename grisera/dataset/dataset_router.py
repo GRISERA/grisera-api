@@ -10,7 +10,7 @@ from grisera.channel.channel_model import ChannelIn
 from grisera.channel.channel_model import Types as channel_types
 from grisera.dataset.dataset_model import DatasetOut, DatasetsOut, DatasetIn
 from grisera.helpers.hateoas import get_links
-from grisera.helpers.helpers import check_dataset_permission
+from grisera.helpers.helpers import check_dataset_permission, get_permissions
 from grisera.life_activity.life_activity_model import LifeActivity as life_activity_types
 from grisera.measure_name.measure_name_model import MeasureName as measure_name_types, MeasureNameIn
 from grisera.measure.measure_model import Measure as measure_type, MeasureIn
@@ -42,7 +42,6 @@ class DatasetRouter:
         self.measure_name_service = service_factory.get_measure_name_service()
         self.measure_service = service_factory.get_measure_service()
         self.arrangement_service = service_factory.get_arrangement_service()
-        self.permissions_service = service_factory.get_permissions_service()
 
     @router.post("/datasets", tags=["datasets"], response_model=DatasetOut)
     async def create_dataset(self, response: Response, dataset: DatasetIn):
@@ -105,9 +104,11 @@ class DatasetRouter:
         """
         dataset_ids = []
         user_id = token['sub']
-        permissions = self.permissions_service.get_permissions(user_id)
+        permissions = get_permissions(user_id)
+        print(permissions)
         for permission in permissions:
             dataset_ids.append(str(permission['datasetId']))
+        print(dataset_ids)
         get_response = self.dataset_service.get_datasets(dataset_ids)
         if get_response.errors is not None:
             response.status_code = 422

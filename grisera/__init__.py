@@ -69,9 +69,6 @@ from .personality.personality_model import *
 from .personality.personality_router import PersonalityRouter, router as personality_router
 from .personality.personality_service import PersonalityService
 
-from .permission.permission_model import *
-from .permission.permission_service import PermissionService
-
 from .property.property_model import PropertyIn
 
 from .recording.recording_model import *
