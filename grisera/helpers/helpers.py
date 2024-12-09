@@ -5,6 +5,8 @@ from typing import Union
 from grisera.auth.auth_bearer import JWTBearer
 from grisera.auth.auth_module import Roles
 
+from grisera.auth.auth_config import PERMISSIONS_ENDPOINT, KEYCLOAK_SERVER, REALM, CLIENT_ID, CLIENT_SECRET
+
 
 def create_stub_from_response(response, id_key='id', properties=None):
     if properties is None:
@@ -34,12 +36,9 @@ def check_dataset_permission(request: Request, dataset_id: Union[int, str], toke
 
 
 def get_permissions(user_id: Union[int, str]):
-    url = "http://localhost:8090/realms/grisera/protocol/openid-connect/token"
+    url = f"{KEYCLOAK_SERVER}/realms/{REALM}/protocol/openid-connect/token"
 
-    client_id = "grisera-api"
-    client_secret = "5796CDsAuwc0nC7YHIg9lKfCy8PXHUuJ"
-
-    payload = f'grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}'
+    payload = f'grant_type=client_credentials&client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}'
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
     }
@@ -51,5 +50,5 @@ def get_permissions(user_id: Union[int, str]):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    response = requests.get(f'http://localhost:8085/api/permissions/{user_id}', headers=headers)
+    response = requests.get(f'{PERMISSIONS_ENDPOINT}/{user_id}', headers=headers)
     return response.json()
