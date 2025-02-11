@@ -6,7 +6,7 @@ LONG_DESCRIPTION = 'Graph Representation Integrating Signals for Emotion Recogni
 
 # Setting up
 setup(
-    name="grisera",
+    name="grisera2",
     version=VERSION,
     author="",
     author_email="",
