@@ -4,7 +4,7 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
 import jwt
 
-from grisera.auth.auth_config import JWT_ALGORITHM, JWKS_URL, KEYCLOAK_SERVER, REALM
+from grisera.auth.auth_config import JWT_ALGORITHM, JWKS_URL, VERIFY_ISS
 import requests
 
 
@@ -28,7 +28,6 @@ def verify_jwt(jwtoken: str) -> bool:
         return payload is not None
     except Exception as e:
         return False
-
 
 
 def construct_pem_key(key):
@@ -61,7 +60,7 @@ def decode_jwt(token: str) -> dict:
             token,
             public_key,
             algorithms=[JWT_ALGORITHM],
-            issuer=f"{KEYCLOAK_SERVER}/realms/{REALM}",
+            verify_iss=VERIFY_ISS,
         )
         # Additional expiration check
         if decoded_token["exp"] < time.time():

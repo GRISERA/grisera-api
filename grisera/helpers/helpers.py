@@ -44,11 +44,21 @@ def get_permissions(user_id: Union[int, str]):
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as http_err:
+        print(f"Token request failure: {response.status_code}, {response.json()}")
+        return response.json()
 
     access_token = response.json()['access_token']
 
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
-    response = requests.get(f'{PERMISSIONS_ENDPOINT}/{user_id}', headers=headers)
-    return response.json()
+    try:
+        response = requests.get(f'{PERMISSIONS_ENDPOINT}/{user_id}', headers=headers)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as http_err:
+        print(f"Request failure: {response.status_code}, {response.json()}")
+        return response.json()
