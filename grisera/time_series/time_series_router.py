@@ -1,6 +1,8 @@
+import os
 from typing import Union, Optional
+from uuid import uuid4
 
-from fastapi import Response, Depends
+from fastapi import Response, Depends, UploadFile, File
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from starlette.requests import Request
@@ -20,6 +22,9 @@ from grisera.time_series.time_series_model import (
     TimeSeriesMultidimensionalOut
 )
 
+from minio import Minio
+from minio.error import S3Error
+
 router = InferringRouter(dependencies=[Depends(check_dataset_permission)])
 
 
@@ -34,6 +39,52 @@ class TimeSeriesRouter:
 
     def __init__(self, service_factory: ServiceFactory = Depends(service.get_service_factory)):
         self.time_series_service = service_factory.get_time_series_service()
+
+    @router.post("/time-series/upload-file", tags=["upload"])
+    async def upload_file(self, response: Response, file: UploadFile = File(...)):
+        """
+        Upload a file associated with a recording and store it in MinIO S3 storage
+        """
+        access_key = os.getenv("AWS_ACCESS_KEY_ID")
+        secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+        region = os.getenv("AWS_REGION", "us-east-1")
+
+        minio_client = Minio(
+            "s3:9000",
+            access_key=access_key,
+            secret_key=secret_key,
+            secure=False,
+            region=region,
+        )
+
+        uuid = uuid4()
+        bucket_name = "recordings"
+        object_name = f"{uuid}/{file.filename}"
+
+        try:
+            if not minio_client.bucket_exists(bucket_name):
+                minio_client.make_bucket(bucket_name)
+
+            minio_client.put_object(
+                bucket_name,
+                object_name,
+                file.file,
+                length=-1,
+                part_size=10 * 1024 * 1024,
+                content_type=file.content_type,
+            )
+        except S3Error as e:
+            response.status_code = 500
+            return { "error": f"Failed to upload file: {str(e)}" }
+
+        # Add HATEOAS links
+        links = get_links(router)
+
+        return {
+            "message": "File uploaded successfully",
+            "file_url": f"http://localhost:9000/{bucket_name}/{object_name}",
+            "links": links,
+        }
 
     @router.post("/time_series", tags=["time series"], response_model=TimeSeriesOut)
     async def create_time_series(self, time_series: TimeSeriesIn, response: Response, dataset_id: Union[int, str]):
