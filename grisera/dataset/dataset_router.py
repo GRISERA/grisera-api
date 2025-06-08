@@ -105,10 +105,8 @@ class DatasetRouter:
         dataset_ids = []
         user_id = token['sub']
         permissions = get_permissions(user_id)
-        print(permissions)
         for permission in permissions:
             dataset_ids.append(str(permission['datasetId']))
-        print(dataset_ids)
         get_response = self.dataset_service.get_datasets(dataset_ids)
         if get_response.errors is not None:
             response.status_code = 422
