@@ -4,7 +4,7 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
 import jwt
 
-from grisera.auth.auth_config import JWT_ALGORITHM, JWKS_URL, VERIFY_ISS
+from grisera.auth.auth_config import JWT_ALGORITHM, JWKS_URL, ISSUER
 import requests
 
 
@@ -60,8 +60,10 @@ def decode_jwt(token: str) -> dict:
             token,
             public_key,
             algorithms=[JWT_ALGORITHM],
-            verify_iss=VERIFY_ISS,
+            verify_iss=ISSUER is not None,
+            issuer=ISSUER,
         )
+
         # Additional expiration check
         if decoded_token["exp"] < time.time():
             raise ValueError("Token has expired")
