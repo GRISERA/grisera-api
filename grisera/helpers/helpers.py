@@ -36,6 +36,11 @@ def check_dataset_permission(request: Request, dataset_id: Union[int, str], toke
 
 
 def get_permissions(user_id: Union[int, str]):
+    access_token = _getAccessToken()
+    return _request_permissions(access_token, user_id)
+
+
+def _getAccessToken():
     url = f"{KEYCLOAK_SERVER}/realms/{REALM}/protocol/openid-connect/token"
 
     payload = f'grant_type=client_credentials&client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}'
@@ -44,14 +49,17 @@ def get_permissions(user_id: Union[int, str]):
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+
     try:
         response.raise_for_status()
     except requests.exceptions.HTTPError as http_err:
         print(f"Token request failure: {response.status_code}, {response.json()}")
-        return response.json()
+        raise http_err
 
-    access_token = response.json()['access_token']
+    return response.json()['access_token']
 
+
+def _request_permissions(access_token, user_id):
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
@@ -60,5 +68,6 @@ def get_permissions(user_id: Union[int, str]):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as http_err:
+        response = http_err.response
         print(f"Request failure: {response.status_code}, {response.json()}")
         return response.json()
