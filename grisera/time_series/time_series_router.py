@@ -48,9 +48,10 @@ class TimeSeriesRouter:
         access_key = os.getenv("AWS_ACCESS_KEY_ID")
         secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         region = os.getenv("AWS_REGION", "us-east-1")
+        minio_endpoint = os.getenv("MINIO_ENDPOINT", "s3:9000")
 
         minio_client = Minio(
-            "s3:9000",
+            minio_endpoint,
             access_key=access_key,
             secret_key=secret_key,
             secure=False,

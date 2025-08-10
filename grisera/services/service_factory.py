@@ -21,6 +21,7 @@ from grisera.registered_channel.registered_channel_service import RegisteredChan
 from grisera.registered_data.registered_data_service import RegisteredDataService
 from grisera.scenario.scenario_service import ScenarioService
 from grisera.time_series.time_series_service import TimeSeriesService
+from grisera.file.file_service import FileService
 
 
 class ServiceFactory():
@@ -107,4 +108,8 @@ class ServiceFactory():
 
     @abstractmethod
     def get_time_series_service(self) -> TimeSeriesService:
+        pass
+
+    @abstractmethod
+    def get_file_service(self) -> FileService:
         pass
