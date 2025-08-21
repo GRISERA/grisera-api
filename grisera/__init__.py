@@ -46,6 +46,7 @@ from .modality.modality_router import ModalityRouter, router as modality_router
 from .modality.modality_service import ModalityService
 
 from .models.base_model_out import BaseModelOut
+from .models.importable_model import ImportableModel
 from .models.not_found_model import NotFoundByIdModel
 from .models.relation_information_model import RelationInformation
 

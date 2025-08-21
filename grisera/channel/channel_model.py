@@ -41,10 +41,12 @@ class ChannelIn(BaseModel):
 
     Attributes:
     type (str): Type of the channel
+    external_id (Optional[str]): External ID from source system
     """
 
     type: str
     description: str
+    external_id: Optional[str]
 
 
 class BasicChannelOut(ChannelIn):

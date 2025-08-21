@@ -33,8 +33,12 @@ class RecordingRelationIn(BaseModel):
 class RecordingIn(RecordingPropertyIn, RecordingRelationIn):
     """
     Full model of recording to acquire from client
-
+    
+    Attributes:
+    external_id (Optional[str]): External ID from source system
     """
+    
+    external_id: Optional[str]
 
 
 class BasicRecordingOut(RecordingIn):

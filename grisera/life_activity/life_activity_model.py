@@ -37,9 +37,11 @@ class LifeActivityIn(BaseModel):
 
     Attributes:
     life_activity (str): Actions of a human body
+    external_id (Optional[str]): External ID from source system
     """
 
     life_activity: str
+    external_id: Optional[str]
 
 
 class BasicLifeActivityOut(LifeActivityIn):

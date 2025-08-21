@@ -15,6 +15,7 @@ class PersonalityBigFiveIn(BaseModel):
         extroversion (float): Scale of being outgoing, talkative, energetic
         neuroticism (float): Scale of lack of self-control, poor ability to manage psychological stress
         openess (float): Scale of openness (Intellect) reflects imagination, creativity
+        external_id (Optional[str]): External ID from source system
 
     """
 
@@ -23,6 +24,7 @@ class PersonalityBigFiveIn(BaseModel):
     extroversion: float
     neuroticism: float
     openess: float
+    external_id: Optional[str]
 
 
 class BasicPersonalityBigFiveOut(PersonalityBigFiveIn):
@@ -55,10 +57,12 @@ class PersonalityPanasIn(BaseModel):
     Attributes:
         negative_affect (float): Scale of negative affect to community
         positive_affect (float): Scale of positive affect to community
+        external_id (Optional[str]): External ID from source system
     """
 
     negative_affect: float
     positive_affect: float
+    external_id: Optional[str]
 
 
 class BasicPersonalityPanasOut(PersonalityPanasIn):

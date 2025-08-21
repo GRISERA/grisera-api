@@ -135,7 +135,12 @@ class TimeSeriesRelationIn(BaseModel):
 class TimeSeriesIn(TimeSeriesPropertyIn, TimeSeriesRelationIn):
     """
     Full model of time series to acquire from client
+    
+    Attributes:
+    external_id (Optional[str]): External ID from source system
     """
+    
+    external_id: Optional[str]
 
 
 class BasicTimeSeriesOut(TimeSeriesPropertyIn, TimeSeriesRelationIn, BaseModelOut):

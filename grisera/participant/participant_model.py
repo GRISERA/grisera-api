@@ -5,6 +5,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
@@ -23,7 +24,7 @@ class Sex(str, Enum):
     not_given = "not given"
 
 
-class ParticipantIn(BaseModel):
+class ParticipantIn(ImportableModel):
     """
     Model of participant to acquire from client
 

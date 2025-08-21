@@ -46,10 +46,12 @@ class MeasureNameIn(BaseModel):
     Attributes:
     name (str): Name of measure
     type (str): Type of the measure name
+    external_id (Optional[str]): External ID from source system
     """
 
     name: str
     type: str
+    external_id: Optional[str]
 
 
 class BasicMeasureNameOut(MeasureNameIn):

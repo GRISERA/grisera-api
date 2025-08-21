@@ -51,9 +51,11 @@ class ModalityIn(BaseModel):
 
     Attributes:
     modality (str): Type of observable information
+    external_id (Optional[str]): External ID from source system
     """
 
     modality: str
+    external_id: Optional[str]
 
 
 class BasicModalityOut(ModalityIn):

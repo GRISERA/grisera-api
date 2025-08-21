@@ -12,10 +12,12 @@ class RegisteredDataIn(BaseModel):
 
     Attributes:
     source (str): URI address where recorded data is located
+    external_id (Optional[str]): External ID from source system
 
     """
 
     source: Optional[str]
+    external_id: Optional[str]
     additional_properties: Optional[List[PropertyIn]]
 
 

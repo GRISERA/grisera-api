@@ -69,7 +69,12 @@ class MeasureRelationIn(BaseModel):
 class MeasureIn(MeasurePropertyIn, MeasureRelationIn):
     """
     Full model of measure to acquire from client
+    
+    Attributes:
+    external_id (Optional[str]): External ID from source system
     """
+    
+    external_id: Optional[str]
 
 
 class BasicMeasureOut(MeasureIn):
