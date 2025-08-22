@@ -29,6 +29,7 @@ class ParticipantIn(BaseModel):
 
     Attributes:
         name (str): Name of the participant
+        surname (str): Surname of the participant
         date_of_birth (Optional[date]): Date of birth of participant
         sex (Optional[str]): Sex of participant
         disorder (Optional[str]): Type of disorder
@@ -36,6 +37,7 @@ class ParticipantIn(BaseModel):
     """
 
     name: Optional[str]
+    surname: Optional[str]
     date_of_birth: Optional[date]
     sex: Optional[str]
     disorder: Optional[str]

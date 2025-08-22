@@ -6,7 +6,6 @@ from grisera.channel.channel_model import ChannelIn
 class ChannelService:
     """
     Abstract class to handle logic of channel requests
-
     """
 
     def save_channel(self, channel: ChannelIn, dataset_id: Union[int, str]):
@@ -45,3 +44,17 @@ class ChannelService:
             Result of request as channel object
         """
         raise Exception("get_channel not implemented yet")
+
+    def update_channel(self, channel_id: Union[int, str], channel: ChannelIn, dataset_id: Union[int, str]):
+        """
+        Send request to graph api to update given channel
+
+        Args:
+            channel_id (int | str): identity of channel
+            channel (ChannelIn): Properties to update
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as channel object
+        """
+        raise Exception("update_channel not implemented yet")
