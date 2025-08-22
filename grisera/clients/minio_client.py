@@ -12,16 +12,25 @@ class MinIOClient:
     MinIO client wrapper for file storage operations
     """
     
-    def __init__(self):
+    def __init__(self, bucket_name: str):
         self.access_key = os.getenv("AWS_ACCESS_KEY_ID")
         self.secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         self.region = os.getenv("AWS_REGION", "us-east-1")
         self.endpoint = os.getenv("MINIO_ENDPOINT", "s3:9000")
-        self.public_endpoint = os.getenv("MINIO_PUBLIC_ENDPOINT", "localhost:9000")
-        self.bucket_name = "files"
+        self.public_endpoint_url = os.getenv("MINIO_PUBLIC_ENDPOINT", "http://localhost:9000")
+        self.bucket_name = bucket_name
+        
+        # Parse public endpoint URL
+        from urllib.parse import urlparse
+        parsed = urlparse(self.public_endpoint_url)
+        self.public_endpoint = parsed.netloc  # This includes port if specified
         
         self._client = None
         self._public_client = None
+    
+    def _is_secure_endpoint(self, url: str) -> bool:
+        """Check if endpoint should use secure connection"""
+        return url.startswith('https://')
     
     @property
     def client(self) -> Minio:
@@ -31,7 +40,7 @@ class MinIOClient:
                 self.endpoint,
                 access_key=self.access_key,
                 secret_key=self.secret_key,
-                secure=False,
+                secure=False,  # Internal endpoint is typically http
                 region=self.region,
             )
         return self._client
@@ -40,11 +49,12 @@ class MinIOClient:
     def public_client(self) -> Minio:
         """Get public MinIO client instance for URL generation"""
         if self._public_client is None:
+            secure = self._is_secure_endpoint(self.public_endpoint_url)
             self._public_client = Minio(
                 self.public_endpoint,
                 access_key=self.access_key,
                 secret_key=self.secret_key,
-                secure=False,
+                secure=secure,
                 region=self.region,
             )
         return self._public_client
@@ -54,8 +64,28 @@ class MinIOClient:
         try:
             if not self.client.bucket_exists(self.bucket_name):
                 self.client.make_bucket(self.bucket_name)
+                # Set bucket to private by default (no public policy)
+                self._ensure_bucket_is_private()
         except S3Error as e:
             raise HTTPException(status_code=500, detail=f"Failed to create bucket: {str(e)}")
+    
+    def _ensure_bucket_is_private(self) -> None:
+        """Ensure bucket has no public read policy"""
+        try:
+            # Remove any existing bucket policy to make it private
+            self.client.delete_bucket_policy(self.bucket_name)
+        except S3Error:
+            # Ignore errors - bucket might not have any policy set
+            pass
+    
+    def make_bucket_private(self) -> None:
+        """
+        Explicitly make bucket private (can be called manually for existing buckets)
+        """
+        try:
+            self._ensure_bucket_is_private()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to make bucket private: {str(e)}")
     
     def upload_file(self, object_name: str, file_data: bytes, content_type: str) -> None:
         """

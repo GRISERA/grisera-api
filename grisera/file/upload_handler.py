@@ -3,9 +3,9 @@ from uuid import uuid4
 
 from fastapi import UploadFile, HTTPException
 
+from grisera.clients.minio_client import MinIOClient
 from grisera.file.archive_extractor import ArchiveExtractor
 from grisera.file.file_validation import FileValidator
-from grisera.file.minio_client import MinIOClient
 from grisera.file.file_model import FileOut
 from grisera.file.file_service import FileService
 from grisera.helpers.hateoas import get_links
@@ -20,7 +20,7 @@ class UploadHandler:
         self.file_service = file_service
         self.router = router
         self.validator = FileValidator()
-        self.minio_client = MinIOClient()
+        self.minio_client = MinIOClient("files")
         self.archive_extractor = ArchiveExtractor()
     
     async def handle_upload(self, file: UploadFile, name: str, 

@@ -5,9 +5,9 @@ from fastapi.responses import StreamingResponse
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 
+from grisera.clients.minio_client import MinIOClient
 from grisera.file.file_model import FileOut, FilesOut
 from grisera.file.file_service import FileService
-from grisera.file.minio_client import MinIOClient
 from grisera.file.file_validation import FileValidator
 from grisera.file.upload_handler import UploadHandler
 from grisera.helpers.hateoas import get_links
@@ -30,7 +30,7 @@ class FileRouter:
 
     def __init__(self, service_factory: ServiceFactory = Depends(service.get_service_factory)):
         self.file_service = service_factory.get_file_service()
-        self.minio_client = MinIOClient()
+        self.minio_client = MinIOClient("files")
         self.validator = FileValidator()
         self.upload_handler = UploadHandler(self.file_service, router)
 
