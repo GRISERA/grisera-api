@@ -3,21 +3,20 @@ from typing import List, Union, Optional
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
-class RegisteredDataIn(BaseModel):
+class RegisteredDataIn(ImportableModel):
     """
     Model of registered data to acquire from client
 
     Attributes:
     source (str): URI address where recorded data is located
-    external_id (Optional[str]): External ID from source system
 
     """
 
     source: Optional[str]
-    external_id: Optional[str]
     additional_properties: Optional[List[PropertyIn]]
 
 

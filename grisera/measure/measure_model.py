@@ -4,6 +4,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 class Measure(tuple, Enum):
     """
@@ -66,15 +67,10 @@ class MeasureRelationIn(BaseModel):
     measure_name_id: Optional[Union[int, str]]
 
 
-class MeasureIn(MeasurePropertyIn, MeasureRelationIn):
+class MeasureIn(MeasurePropertyIn, MeasureRelationIn, ImportableModel):
     """
     Full model of measure to acquire from client
-    
-    Attributes:
-    external_id (Optional[str]): External ID from source system
     """
-    
-    external_id: Optional[str]
 
 
 class BasicMeasureOut(MeasureIn):

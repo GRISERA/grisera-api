@@ -4,6 +4,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 
 class LifeActivity(str, Enum):
@@ -31,17 +32,15 @@ class LifeActivity(str, Enum):
     brain_activity = "brain activity"
 
 
-class LifeActivityIn(BaseModel):
+class LifeActivityIn(ImportableModel):
     """
     Model of actions of a human body observed during experiment
 
     Attributes:
     life_activity (str): Actions of a human body
-    external_id (Optional[str]): External ID from source system
     """
 
     life_activity: str
-    external_id: Optional[str]
 
 
 class BasicLifeActivityOut(LifeActivityIn):

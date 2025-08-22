@@ -40,7 +40,6 @@ class ParticipantIn(ImportableModel):
     date_of_birth: Optional[date]
     sex: Optional[str]
     disorder: Optional[str]
-    additional_properties: Optional[List[PropertyIn]]
 
 
 class BasicParticipantOut(ParticipantIn):

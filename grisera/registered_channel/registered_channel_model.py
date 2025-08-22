@@ -3,22 +3,21 @@ from typing import Optional, List, Union
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
-class RegisteredChannelIn(BaseModel):
+class RegisteredChannelIn(ImportableModel):
     """
     Model of registered channel to acquire from client
 
     Attributes:
     channel_id (Union[int, str]): Channel by which data was registered
     registered_data_id (Union[int, str]): Id of created registered data
-    external_id (Optional[str]): External ID from source system
     """
 
     channel_id: Optional[Union[int, str]]
     registered_data_id: Optional[Union[int, str]]
-    external_id: Optional[str]
     additional_properties: Optional[List[PropertyIn]]
 
 

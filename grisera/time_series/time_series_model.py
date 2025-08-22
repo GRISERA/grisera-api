@@ -4,6 +4,7 @@ from typing import Optional, List, Union
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
@@ -132,15 +133,10 @@ class TimeSeriesRelationIn(BaseModel):
     measure_id: Optional[Union[int, str]]
 
 
-class TimeSeriesIn(TimeSeriesPropertyIn, TimeSeriesRelationIn):
+class TimeSeriesIn(TimeSeriesPropertyIn, TimeSeriesRelationIn, ImportableModel):
     """
     Full model of time series to acquire from client
-    
-    Attributes:
-    external_id (Optional[str]): External ID from source system
     """
-    
-    external_id: Optional[str]
 
 
 class BasicTimeSeriesOut(TimeSeriesPropertyIn, TimeSeriesRelationIn, BaseModelOut):

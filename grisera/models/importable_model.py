@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
@@ -10,5 +11,6 @@ class ImportableModel(BaseModel):
         external_id (Optional[str]): External ID from import source (e.g. @id from JSON)
     """
     external_id: Optional[str] = None
-
+    import_job_id: Optional[str] = None
+    import_timestamp: Optional[datetime] = None
 
