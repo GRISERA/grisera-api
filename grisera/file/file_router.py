@@ -1,18 +1,15 @@
-import os
-import io
-from typing import Union
-from uuid import uuid4
+from typing import Union, List
 
-from fastapi import Response, Depends, UploadFile, File, Form, HTTPException, Request
+from fastapi import Response, Depends, UploadFile, File, Form, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
-from minio import Minio
-from minio.error import S3Error
 
-from grisera.auth.auth_bearer import JWTBearer
 from grisera.file.file_model import FileOut, FilesOut
 from grisera.file.file_service import FileService
+from grisera.file.minio_client import MinIOClient
+from grisera.file.file_validation import FileValidator
+from grisera.file.upload_handler import UploadHandler
 from grisera.helpers.hateoas import get_links
 from grisera.helpers.helpers import check_dataset_permission
 from grisera.models.not_found_model import NotFoundByIdModel
@@ -33,6 +30,9 @@ class FileRouter:
 
     def __init__(self, service_factory: ServiceFactory = Depends(service.get_service_factory)):
         self.file_service = service_factory.get_file_service()
+        self.minio_client = MinIOClient()
+        self.validator = FileValidator()
+        self.upload_handler = UploadHandler(self.file_service, router)
 
     @router.get("/files", tags=["files"], response_model=FilesOut)
     def get_files(self, response: Response, dataset_id: Union[int, str]) -> FilesOut:
@@ -76,11 +76,12 @@ class FileRouter:
             links=get_links(router)
         )
 
-    @router.post("/files/upload", tags=["files"], response_model=FileOut)
+    @router.post("/files/upload", tags=["files"], response_model=Union[FileOut, List[FileOut]])
     async def upload_file(self, response: Response, file: UploadFile = File(...), 
-                         name: str = Form(...), dataset_id: str = Form(...)) -> FileOut:
+                         name: str = Form(...), dataset_id: str = Form(...)) -> Union[FileOut, List[FileOut]]:
         """
-        Upload a file and store it in MinIO S3 storage
+        Upload a file and store it in MinIO S3 storage.
+        If the file is a ZIP archive, it will be extracted and each file uploaded separately.
 
         Args:
             file (UploadFile): File to upload
@@ -88,67 +89,17 @@ class FileRouter:
             dataset_id (str): Associated dataset ID (form field, required)
 
         Returns:
-            FileOut: File metadata
+            Union[FileOut, List[FileOut]]: File metadata or list of extracted files metadata
         """
-        access_key = os.getenv("AWS_ACCESS_KEY_ID")
-        secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-        region = os.getenv("AWS_REGION", "us-east-1")
-        minio_endpoint = os.getenv("MINIO_ENDPOINT", "s3:9000")
-
-        minio_client = Minio(
-            minio_endpoint,
-            access_key=access_key,
-            secret_key=secret_key,
-            secure=False,
-            region=region,
-        )
-
-        uuid = uuid4()
-        bucket_name = "files"
-        object_name = f"{uuid}/{file.filename}"
-
         try:
-            if not minio_client.bucket_exists(bucket_name):
-                minio_client.make_bucket(bucket_name)
-
-            file_content = await file.read()
-            file_stream = io.BytesIO(file_content)
-            
-            minio_client.put_object(
-                bucket_name,
-                object_name,
-                file_stream,
-                length=len(file_content),
-                content_type=file.content_type,
-            )
-
-            # Save file metadata
-            if not name:
-                response.status_code = 400
-                raise HTTPException(status_code=400, detail="File name is required")
-            
-            if not dataset_id:
-                response.status_code = 400
-                raise HTTPException(status_code=400, detail="Dataset ID is required")
-                
-            file_metadata = self.file_service.save_file_metadata(
-                filename=object_name,
-                original_filename=file.filename,
-                name=name,
-                size=len(file_content),
-                content_type=file.content_type,
-                dataset_id=dataset_id
-            )
-
+            result = await self.upload_handler.handle_upload(file, name, dataset_id)
             response.status_code = 201
-            return FileOut(
-                **file_metadata.dict(),
-                links=get_links(router)
-            )
-
-        except S3Error as e:
+            return result
+        except HTTPException:
+            raise
+        except Exception as e:
             response.status_code = 500
-            raise HTTPException(status_code=500, detail=f"Failed to upload file: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Unexpected error during file upload: {str(e)}")
 
     @router.get("/files/{file_id}/download", tags=["files"])
     def download_file(self, file_id: Union[int, str], response: Response):
@@ -165,53 +116,17 @@ class FileRouter:
         
         if file_data is None:
             raise HTTPException(status_code=404, detail="File not found")
-
-        access_key = os.getenv("AWS_ACCESS_KEY_ID")
-        secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-        region = os.getenv("AWS_REGION", "us-east-1")
-        minio_endpoint = os.getenv("MINIO_ENDPOINT", "s3:9000")
-
-        minio_client = Minio(
-            minio_endpoint,
-            access_key=access_key,
-            secret_key=secret_key,
-            secure=False,
-            region=region,
-        )
-
-        bucket_name = "files"
         
         try:
-            from datetime import timedelta
-            
-            # For public URLs, create a separate client with public endpoint
-            public_minio_endpoint = os.getenv("MINIO_PUBLIC_ENDPOINT", "localhost:9000")
-            public_minio_client = Minio(
-                public_minio_endpoint,
-                access_key=access_key,
-                secret_key=secret_key,
-                secure=False,
-                region=region,
-            )
-            
-            # Generate pre-signed URL valid for 1 hour using public endpoint
-            download_url = public_minio_client.presigned_get_object(
-                bucket_name, 
-                file_data.filename,
-                expires=timedelta(hours=1),
-                response_headers={
-                    'response-content-disposition': f'attachment; filename="{file_data.original_filename}"'
-                }
+            download_info = self.minio_client.generate_download_url(
+                file_data.filename, 
+                file_data.original_filename
             )
             
             response.status_code = 200
-            return {
-                "download_url": download_url,
-                "filename": file_data.original_filename,
-                "expires_in": 3600  # 1 hour in seconds
-            }
-        except S3Error as e:
-            raise HTTPException(status_code=500, detail=f"Failed to generate download URL: {str(e)}")
+            return download_info
+        except HTTPException:
+            raise
 
     @router.get("/files/{file_id}/preview", tags=["files"])
     def preview_file(self, file_id: Union[int, str]):
@@ -228,42 +143,12 @@ class FileRouter:
         
         if file_data is None:
             raise HTTPException(status_code=404, detail="File not found")
-
-        # Allow preview for common previewable file types
-        previewable_types = [
-            'text/',           # Text files
-            'image/',          # Images
-            'application/pdf', # PDF files
-            'application/json',# JSON files
-            'application/xml', # XML files
-            'video/',          # Video files
-            'audio/',          # Audio files
-        ]
         
-        is_previewable = any(file_data.content_type.startswith(ptype) or 
-                           file_data.content_type == ptype 
-                           for ptype in previewable_types)
-        
-        if not is_previewable:
+        if not self.validator.is_previewable(file_data.content_type):
             raise HTTPException(status_code=400, detail="Preview not available for this file type")
-
-        access_key = os.getenv("AWS_ACCESS_KEY_ID")
-        secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-        region = os.getenv("AWS_REGION", "us-east-1")
-        minio_endpoint = os.getenv("MINIO_ENDPOINT", "s3:9000")
-
-        minio_client = Minio(
-            minio_endpoint,
-            access_key=access_key,
-            secret_key=secret_key,
-            secure=False,
-            region=region,
-        )
-
-        bucket_name = "files"
         
         try:
-            response = minio_client.get_object(bucket_name, file_data.filename)
+            file_response = self.minio_client.get_file(file_data.filename)
             
             # Headers for optimized streaming of large files
             headers = {
@@ -273,12 +158,42 @@ class FileRouter:
             }
             
             return StreamingResponse(
-                response, 
+                file_response, 
                 media_type=file_data.content_type,
                 headers=headers
             )
-        except S3Error as e:
-            raise HTTPException(status_code=500, detail=f"Failed to preview file: {str(e)}")
+        except HTTPException:
+            raise
+
+    @router.get("/files/{file_id}/preview-url", tags=["files"])
+    def get_preview_url(self, file_id: Union[int, str], response: Response):
+        """
+        Generate pre-signed URL for file preview in browser
+
+        Args:
+            file_id (Union[int, str]): File ID
+
+        Returns:
+            Dict: Pre-signed preview URL
+        """
+        file_data = self.file_service.get_file_by_id(file_id)
+        
+        if file_data is None:
+            raise HTTPException(status_code=404, detail="File not found")
+        
+        if not self.validator.is_previewable(file_data.content_type):
+            raise HTTPException(status_code=400, detail="Preview not available for this file type")
+        
+        try:
+            preview_info = self.minio_client.generate_preview_url(
+                file_data.filename, 
+                file_data.content_type
+            )
+            
+            response.status_code = 200
+            return preview_info
+        except HTTPException:
+            raise
 
     @router.delete("/files/{file_id}", tags=["files"])
     def delete_file(self, file_id: Union[int, str], response: Response):
@@ -296,25 +211,10 @@ class FileRouter:
         if file_data is None:
             response.status_code = 404
             return NotFoundByIdModel(id=file_id, errors="File not found")
-
-        access_key = os.getenv("AWS_ACCESS_KEY_ID")
-        secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-        region = os.getenv("AWS_REGION", "us-east-1")
-        minio_endpoint = os.getenv("MINIO_ENDPOINT", "s3:9000")
-
-        minio_client = Minio(
-            minio_endpoint,
-            access_key=access_key,
-            secret_key=secret_key,
-            secure=False,
-            region=region,
-        )
-
-        bucket_name = "files"
         
         try:
             # Delete from MinIO
-            minio_client.remove_object(bucket_name, file_data.filename)
+            self.minio_client.delete_file(file_data.filename)
             
             # Delete metadata
             self.file_service.delete_file(file_id)
@@ -322,6 +222,5 @@ class FileRouter:
             response.status_code = 200
             return {"message": "File deleted successfully", "links": get_links(router)}
             
-        except S3Error as e:
-            response.status_code = 500
-            raise HTTPException(status_code=500, detail=f"Failed to delete file: {str(e)}")
+        except HTTPException:
+            raise
