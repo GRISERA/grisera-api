@@ -50,6 +50,31 @@ class LifeActivityRouter:
 
         return create_response
 
+    @router.put(
+        "/life_activities/{life_activity_id}",
+        tags=["life activities"],
+        response_model=Union[LifeActivityOut, NotFoundByIdModel],
+    )
+    async def update_life_activity(
+        self, 
+        life_activity_id: Union[int, str], 
+        life_activity: LifeActivityIn, 
+        response: Response, 
+        dataset_id: Union[int, str]
+    ):
+        """
+        Update life activity in database
+        """
+        update_response = self.life_activity_service.update_life_activity(life_activity_id, life_activity, dataset_id)
+
+        if update_response.errors is not None:
+            response.status_code = 404
+
+        # add links from hateoas
+        update_response.links = get_links(router)
+
+        return update_response
+
     @router.get(
         "/life_activities/{life_activity_id}",
         tags=["life activities"],
