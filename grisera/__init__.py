@@ -30,6 +30,10 @@ from .experiment.experiment_model import *
 from .experiment.experiment_router import ExperimentRouter, router as experiment_router
 from .experiment.experiment_service import ExperimentService
 
+from .file.file_model import *
+from .file.file_router import FileRouter, router as file_router
+from .file.file_service import FileService
+
 from .helpers.hateoas import prepare_links, get_links
 from .helpers.helpers import create_stub_from_response
 

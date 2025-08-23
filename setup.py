@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.38.30'
+# VERSION = '0.0.38.30'
+VERSION = 'dev'
 DESCRIPTION = 'Grisera-api package'
 LONG_DESCRIPTION = 'Graph Representation Integrating Signals for Emotion Recognition and Analysis (GRISERA) framework provides a persistent model for storing integrated signals and methods for its creation.'
 
@@ -21,7 +22,8 @@ setup(
         'fastapi-utils',
         'pydantic~=1.10.6',
         'starlette~=0.26.1',
-        'pyjwt'
+        'pyjwt',
+        'minio~=7.1.0',
     ],
     classifiers=[
         "Development Status :: 1 - Planning",

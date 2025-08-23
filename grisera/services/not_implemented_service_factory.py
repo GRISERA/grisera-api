@@ -20,6 +20,7 @@ from grisera.registered_data.registered_data_service import RegisteredDataServic
 from grisera.scenario.scenario_service import ScenarioService
 from grisera.services.service_factory import ServiceFactory
 from grisera.time_series.time_series_service import TimeSeriesService
+from grisera.file.file_service import FileService
 
 
 class NotImplementedServiceFactory(ServiceFactory):
@@ -84,4 +85,7 @@ class NotImplementedServiceFactory(ServiceFactory):
         pass
 
     def get_time_series_service(self) -> TimeSeriesService:
+        pass
+
+    def get_file_service(self) -> FileService:
         pass
