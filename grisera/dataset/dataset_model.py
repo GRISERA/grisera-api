@@ -43,9 +43,12 @@ class DatasetOut(BasicDatasetOut, BaseModelOut):
         Model of dataset to send to client as a result of request
 
         Attributes:
+            parameters (Optional[List]): Additional parameters for dataset
             errors (Optional[Any]): Optional errors appeared during query executions
             links (Optional[list): Hateoas implementation
     """
+    
+    parameters: Optional[List] = None
 
 
 class DatasetsOut(BaseModelOut):
