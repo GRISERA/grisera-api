@@ -45,6 +45,31 @@ class ModalityRouter:
 
         return create_response
 
+    @router.put(
+        "/modalities/{modality_id}",
+        tags=["modalities"],
+        response_model=Union[ModalityOut, NotFoundByIdModel],
+    )
+    async def update_modality(
+        self, 
+        modality_id: Union[int, str], 
+        modality: ModalityIn, 
+        response: Response, 
+        dataset_id: Union[int, str]
+    ):
+        """
+        Update modality in database
+        """
+        update_response = self.modality_service.update_modality(modality_id, modality, dataset_id)
+
+        if update_response.errors is not None:
+            response.status_code = 404
+
+        # add links from hateoas
+        update_response.links = get_links(router)
+
+        return update_response
+
     @router.get(
         "/modalities/{modality_id}",
         tags=["modalities"],

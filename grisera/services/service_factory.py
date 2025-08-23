@@ -2,6 +2,7 @@ from abc import abstractmethod
 
 from grisera.activity.activity_service import ActivityService
 from grisera.activity_execution.activity_execution_service import ActivityExecutionService
+from grisera.additional_parameter.additional_parameter_service import AdditionalParameterService
 from grisera.appearance.appearance_service import AppearanceService
 from grisera.arrangement.arrangement_service import ArrangementService
 from grisera.channel.channel_service import ChannelService
@@ -112,4 +113,7 @@ class ServiceFactory():
 
     @abstractmethod
     def get_file_service(self) -> FileService:
-        pass
+      pass
+
+    def get_additional_parameter_service(self) -> AdditionalParameterService:
+      pass

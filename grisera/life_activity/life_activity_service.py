@@ -6,7 +6,6 @@ from grisera.life_activity.life_activity_model import LifeActivityIn
 class LifeActivityService:
     """
     Abstract class to handle logic of life activity requests
-
     """
 
     def save_life_activity(self, life_activity: LifeActivityIn, dataset_id: Union[int, str]):
@@ -47,3 +46,17 @@ class LifeActivityService:
             Result of request as life activity object
         """
         raise Exception("get_life_activity not implemented yet")
+
+    def update_life_activity(self, life_activity_id: Union[int, str], life_activity: LifeActivityIn, dataset_id: Union[int, str]):
+        """
+        Send request to graph api to update given life activity
+
+        Args:
+            life_activity_id (int | str): identity of life activity
+            life_activity (LifeActivityIn): Life activity to update
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as life activity object
+        """
+        raise Exception("update_life_activity not implemented yet")

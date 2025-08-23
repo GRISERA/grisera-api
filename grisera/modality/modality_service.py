@@ -6,7 +6,6 @@ from grisera.modality.modality_model import ModalityIn
 class ModalityService:
     """
     Abstract class to handle logic of modality requests
-
     """
 
     def save_modality(self, modality: ModalityIn, dataset_id: Union[int, str]):
@@ -47,3 +46,17 @@ class ModalityService:
             Result of request as modality object
         """
         raise Exception("get_modality not implemented yet")
+
+    def update_modality(self, modality_id: Union[int, str], modality: ModalityIn, dataset_id: Union[int, str]):
+        """
+        Send request to graph api to update given modality
+
+        Args:
+            modality_id (int | str): identity of modality
+            modality (ModalityIn): Modality to update
+            dataset_id (int | str): name of dataset
+
+        Returns:
+            Result of request as modality object
+        """
+        raise Exception("update_modality not implemented yet")

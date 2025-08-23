@@ -6,6 +6,10 @@ from .activity_execution.activity_execution_model import *
 from .activity_execution.activity_execution_router import ActivityExecutionRouter, router as activity_execution_router
 from .activity_execution.activity_execution_service import ActivityExecutionService
 
+from .additional_parameter.additional_parameter_model import *
+from .additional_parameter.additional_parameter_router import AdditionalParameterRouter, router as additional_parameter_router
+from .additional_parameter.additional_parameter_service import AdditionalParameterService
+
 from .appearance.appearance_model import *
 from .appearance.appearance_router import AppearanceRouter, router as appearance_router
 from .appearance.appearance_service import AppearanceService
