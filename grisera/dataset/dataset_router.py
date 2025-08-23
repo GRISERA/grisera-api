@@ -36,6 +36,7 @@ class DatasetRouter:
 
     def __init__(self, service_factory: ServiceFactory = Depends(service.get_service_factory)):
         self.dataset_service = service_factory.get_dataset_service()
+        self.additional_parameter_service = service_factory.get_additional_parameter_service()
         self.channel_service = service_factory.get_channel_service()
         self.modality_service = service_factory.get_modality_service()
         self.life_activity_service = service_factory.get_life_activity_service()
@@ -91,6 +92,11 @@ class DatasetRouter:
         get_response = self.dataset_service.get_dataset(dataset_id)
         if get_response.errors is not None:
             response.status_code = 404
+        else:
+            # Get additional parameters for the dataset
+            parameters_response = self.additional_parameter_service.get_additional_parameters_by_dataset(dataset_id)
+            if parameters_response.errors is None:
+                get_response.parameters = parameters_response.parameters
 
         # add links from hateoas
         get_response.links = get_links(router)

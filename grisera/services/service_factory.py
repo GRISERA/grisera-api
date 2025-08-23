@@ -2,6 +2,7 @@ from abc import abstractmethod
 
 from grisera.activity.activity_service import ActivityService
 from grisera.activity_execution.activity_execution_service import ActivityExecutionService
+from grisera.additional_parameter.additional_parameter_service import AdditionalParameterService
 from grisera.appearance.appearance_service import AppearanceService
 from grisera.arrangement.arrangement_service import ArrangementService
 from grisera.channel.channel_service import ChannelService
@@ -107,4 +108,8 @@ class ServiceFactory():
 
     @abstractmethod
     def get_time_series_service(self) -> TimeSeriesService:
+        pass
+
+    @abstractmethod
+    def get_additional_parameter_service(self) -> AdditionalParameterService:
         pass
