@@ -3,9 +3,10 @@ from typing import Optional, List, Union
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 
-class ParticipationIn(BaseModel):
+class ParticipationIn(ImportableModel):
     """
     Participation model in database
 

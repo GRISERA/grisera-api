@@ -3,11 +3,13 @@ from typing import Optional, List, Union
 
 from pydantic import BaseModel
 
+from grisera.models.importable_model import ImportableModel
+
 from grisera.property.property_model import PropertyIn
 from grisera.models.base_model_out import BaseModelOut
 
 
-class DatasetIn(BaseModel):
+class DatasetIn(ImportableModel):
     """
         Model of dataset to acquire from client
 
@@ -17,6 +19,7 @@ class DatasetIn(BaseModel):
             rights (Optional[str]): Rights set to the dataset given by user
             date (Optional[date]): Date of the dataset given by user
             description (Optional[date]): Description of the dataset given by user
+
             additional_properties (Optional[List[PropertyIn]]): Additional properties for dataset
     """
 
@@ -25,6 +28,7 @@ class DatasetIn(BaseModel):
     rights: Optional[str]
     date: Optional[date]
     description: Optional[str]
+
     additional_properties: Optional[List[PropertyIn]]
 
 

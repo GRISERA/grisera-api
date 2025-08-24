@@ -4,6 +4,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 
 class MeasureName(tuple, Enum):
@@ -39,7 +40,7 @@ class MeasureName(tuple, Enum):
     valence = ("Valence", "PAD")
 
 
-class MeasureNameIn(BaseModel):
+class MeasureNameIn(ImportableModel):
     """
     Model of measure name
 

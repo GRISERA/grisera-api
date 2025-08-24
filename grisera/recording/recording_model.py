@@ -3,6 +3,7 @@ from typing import Optional, List, Union
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
@@ -30,10 +31,9 @@ class RecordingRelationIn(BaseModel):
     registered_channel_id: Optional[Union[int, str]]
 
 
-class RecordingIn(RecordingPropertyIn, RecordingRelationIn):
+class RecordingIn(RecordingPropertyIn, RecordingRelationIn, ImportableModel):
     """
     Full model of recording to acquire from client
-
     """
 
 
