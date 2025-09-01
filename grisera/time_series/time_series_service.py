@@ -123,3 +123,22 @@ class TimeSeriesService:
             Result of request as time series object
         """
         raise Exception("update_time_series_relationships not implemented yet")
+
+    def get_time_series_detailed(self, dataset_id: Union[int, str], 
+                                 activity_execution_id: str,
+                                 participant_id: str):
+        """
+        Get time series with full details (observable informations, measures, etc.) from database.
+        
+        This method is optimized for frontend use - returns detailed time series data
+        with all related entities included, filtered by activity execution and participant.
+        
+        Args:
+            dataset_id (int | str): name of dataset
+            activity_execution_id (str): Filter by activity execution id (required)
+            participant_id (str): Filter by participant id (required)
+
+        Returns:
+            DetailedTimeSeriesNodesOut: Detailed time series objects with full relations
+        """
+        raise Exception("get_time_series_detailed not implemented yet")

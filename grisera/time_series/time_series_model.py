@@ -190,6 +190,17 @@ class TimeSeriesNodesOut(BaseModelOut):
     time_series_nodes: List[BasicTimeSeriesOut] = []
 
 
+class DetailedTimeSeriesNodesOut(BaseModelOut):
+    """
+    Model of detailed time series nodes to send to client as a result of request
+    
+    Attributes:
+        time_series_nodes (List[TimeSeriesOut]): Detailed time series nodes with full relations from database
+    """
+    
+    time_series_nodes: List[TimeSeriesOut] = []
+
+
 # Circular import exception prevention
 from grisera.measure.measure_model import MeasureOut
 from grisera.observable_information.observable_information_model import ObservableInformationOut
