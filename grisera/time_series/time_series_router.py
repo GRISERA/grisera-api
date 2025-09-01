@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Union, Optional, List
 from uuid import uuid4
 
 from fastapi import Response, Depends, UploadFile, File
@@ -15,6 +15,7 @@ from grisera.services.service_factory import ServiceFactory
 from grisera.time_series.time_series_model import (
     TimeSeriesIn,
     TimeSeriesNodesOut,
+    DetailedTimeSeriesNodesOut,
     TimeSeriesOut,
     TimeSeriesPropertyIn,
     TimeSeriesRelationIn,
@@ -187,6 +188,31 @@ class TimeSeriesRouter:
         """
 
         get_response = self.time_series_service.get_time_series_nodes(dataset_id, request.query_params)
+
+        # add links from hateoas
+        get_response.links = get_links(router)
+
+        return get_response
+
+    @router.get("/time_series/detailed", tags=["time series"], response_model=DetailedTimeSeriesNodesOut)
+    async def get_time_series_detailed(self, response: Response, dataset_id: Union[int, str],
+                                       activity_execution_id: str,
+                                       participant_id: str):
+        """
+        Get time series with full details (observable informations, measures, etc.) from database.
+        
+        This endpoint is optimized for frontend use - returns detailed time series data
+        with all related entities included, filtered by activity execution and participant.
+        
+        Args:
+            dataset_id: Name of dataset
+            activity_execution_id: Filter by activity execution id (required)
+            participant_id: Filter by participant id (required)
+        """
+
+        get_response = self.time_series_service.get_time_series_detailed(
+            dataset_id, activity_execution_id, participant_id
+        )
 
         # add links from hateoas
         get_response.links = get_links(router)
