@@ -4,6 +4,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
@@ -23,7 +24,7 @@ class Activity(str, Enum):
     group = "group"
 
 
-class ActivityPropertyIn(BaseModel):
+class ActivityPropertyIn(ImportableModel):
     """
         Model of activity execution to acquire from client
 

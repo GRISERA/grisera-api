@@ -6,6 +6,10 @@ from .activity_execution.activity_execution_model import *
 from .activity_execution.activity_execution_router import ActivityExecutionRouter, router as activity_execution_router
 from .activity_execution.activity_execution_service import ActivityExecutionService
 
+from .additional_parameter.additional_parameter_model import *
+from .additional_parameter.additional_parameter_router import AdditionalParameterRouter, router as additional_parameter_router
+from .additional_parameter.additional_parameter_service import AdditionalParameterService
+
 from .appearance.appearance_model import *
 from .appearance.appearance_router import AppearanceRouter, router as appearance_router
 from .appearance.appearance_service import AppearanceService
@@ -25,6 +29,10 @@ from .dataset.dataset_service import DatasetService
 from .experiment.experiment_model import *
 from .experiment.experiment_router import ExperimentRouter, router as experiment_router
 from .experiment.experiment_service import ExperimentService
+
+from .file.file_model import *
+from .file.file_router import FileRouter, router as file_router
+from .file.file_service import FileService
 
 from .helpers.hateoas import prepare_links, get_links
 from .helpers.helpers import create_stub_from_response
@@ -46,6 +54,7 @@ from .modality.modality_router import ModalityRouter, router as modality_router
 from .modality.modality_service import ModalityService
 
 from .models.base_model_out import BaseModelOut
+from .models.importable_model import ImportableModel
 from .models.not_found_model import NotFoundByIdModel
 from .models.relation_information_model import RelationInformation
 

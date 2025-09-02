@@ -5,20 +5,23 @@ from pydantic import BaseModel
 from grisera.property.property_model import PropertyIn
 from grisera.activity_execution.activity_execution_model import ActivityExecutionIn
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 
-class ScenarioIn(BaseModel):
+class ScenarioIn(ImportableModel):
     """
     Model of scenario to acquire from client
 
     Attributes:
         experiment_id (int | str): id of experiment, the scenario belongs to
         activity_executions (List[ActivityExecutionIn]): list of activity executions in scenario
+
         additional_properties (Optional[List[PropertyIn]]): Additional properties for activity
     """
 
     experiment_id: Optional[Union[int, str]]
     activity_executions: Optional[List[ActivityExecutionIn]]
+
     additional_properties: Optional[List[PropertyIn]]
 
 

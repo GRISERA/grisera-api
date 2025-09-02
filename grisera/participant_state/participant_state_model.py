@@ -4,10 +4,11 @@ from typing import Optional, Union
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
-class ParticipantStatePropertyIn(BaseModel):
+class ParticipantStatePropertyIn(ImportableModel):
     """
     Model of participant state to acquire from client
 

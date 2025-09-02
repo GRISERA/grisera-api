@@ -3,10 +3,11 @@ from typing import Optional, List, Union
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 from grisera.property.property_model import PropertyIn
 
 
-class ActivityExecutionPropertyIn(BaseModel):
+class ActivityExecutionPropertyIn(ImportableModel):
     """
     Model of activity execution to acquire from client
 

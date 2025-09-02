@@ -4,6 +4,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 
 class Modality(str, Enum):
@@ -45,7 +46,7 @@ class Modality(str, Enum):
     neural_activity = "neural activity"
 
 
-class ModalityIn(BaseModel):
+class ModalityIn(ImportableModel):
     """
     Model of modality observed during experiment
 

@@ -4,6 +4,7 @@ from typing import Optional, Union, List
 from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
+from grisera.models.importable_model import ImportableModel
 
 
 class Arrangement(tuple, Enum):
@@ -25,16 +26,18 @@ class Arrangement(tuple, Enum):
     personal_group = ("personal group", None)
 
 
-class ArrangementIn(BaseModel):
+class ArrangementIn(ImportableModel):
     """
     Model of arrangement
 
     Attributes:
     arrangement (str): Type of arrangement
+
     """
 
     arrangement_type: str
     arrangement_distance: Optional[str]
+
 
 
 class BasicArrangementOut(ArrangementIn):

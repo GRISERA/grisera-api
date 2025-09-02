@@ -44,6 +44,31 @@ class ChannelRouter:
 
         return create_response
 
+    @router.put(
+        "/channels/{channel_id}",
+        tags=["channels"],
+        response_model=Union[ChannelOut, NotFoundByIdModel],
+    )
+    async def update_channel(
+        self, 
+        channel_id: Union[int, str], 
+        channel: ChannelIn, 
+        response: Response, 
+        dataset_id: Union[int, str]
+    ):
+        """
+        Update channel in database
+        """
+        update_response = self.channel_service.update_channel(channel_id, channel, dataset_id)
+
+        if update_response.errors is not None:
+            response.status_code = 404
+
+        # add links from hateoas
+        update_response.links = get_links(router)
+
+        return update_response
+
     @router.get(
         "/channels/{channel_id}",
         tags=["channels"],

@@ -20,11 +20,13 @@ class AppearanceOcclusionIn(BaseModel):
         glasses (bool): Does appearance contain glasses
         beard (FacialHair): Length of beard
         moustache (FacialHair): Length of moustache
+        external_id (Optional[str]): External ID from source system
     """
 
     beard: FacialHair
     moustache: FacialHair
     glasses: bool
+    external_id: Optional[str]
 
 
 class BasicAppearanceOcclusionOut(AppearanceOcclusionIn):
@@ -58,12 +60,14 @@ class AppearanceSomatotypeIn(BaseModel):
         ectomorph (float): Range of ectomorph appearance measure
         endomorph (float): Range of endomorph appearance measure
         mesomorph (float): Range of mesomorph appearance measure
+        external_id (Optional[str]): External ID from source system
 
     """
 
     ectomorph: float
     endomorph: float
     mesomorph: float
+    external_id: Optional[str]
 
 
 class BasicAppearanceSomatotypeOut(AppearanceSomatotypeIn):

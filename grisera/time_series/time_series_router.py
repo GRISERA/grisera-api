@@ -1,10 +1,12 @@
-from typing import Union, Optional
+from typing import Union, Optional, List
+from uuid import uuid4
 
-from fastapi import Response, Depends
+from fastapi import Response, Depends, UploadFile, File
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from starlette.requests import Request
 
+from grisera.clients.minio_client import MinIOClient
 from grisera.helpers.hateoas import get_links
 from grisera.helpers.helpers import check_dataset_permission
 from grisera.models.not_found_model import NotFoundByIdModel
@@ -13,6 +15,7 @@ from grisera.services.service_factory import ServiceFactory
 from grisera.time_series.time_series_model import (
     TimeSeriesIn,
     TimeSeriesNodesOut,
+    DetailedTimeSeriesNodesOut,
     TimeSeriesOut,
     TimeSeriesPropertyIn,
     TimeSeriesRelationIn,
@@ -34,6 +37,73 @@ class TimeSeriesRouter:
 
     def __init__(self, service_factory: ServiceFactory = Depends(service.get_service_factory)):
         self.time_series_service = service_factory.get_time_series_service()
+        self.minio_client = MinIOClient("recordings")  # Same bucket as registered_data
+
+    @router.post("/time-series/upload-file", tags=["upload"])
+    async def upload_file(self, response: Response, file: UploadFile = File(...)):
+        """
+        Upload a file associated with time series and store it in MinIO S3 storage
+        """
+        try:
+            # Read file content
+            file_content = await file.read()
+            
+            # Generate unique object name
+            uuid = uuid4()
+            object_name = f"{uuid}/{file.filename}"
+            
+            # Upload using our MinIO client
+            self.minio_client.upload_file(object_name, file_content, file.content_type)
+            
+            # Add HATEOAS links
+            links = get_links(router)
+            
+            response.status_code = 200
+            return {
+                "message": "File uploaded successfully",
+                "object_name": object_name,  # Store object name instead of public URL
+                "uuid": str(uuid),
+                "filename": file.filename,
+                "links": links,
+            }
+        except Exception as e:
+            response.status_code = 500
+            return {"error": f"Failed to upload file: {str(e)}"}
+
+    @router.get("/time-series/preview/{object_name:path}", tags=["upload"])
+    def get_preview_url(self, object_name: str, response: Response):
+        """
+        Generate pre-signed URL for previewing time series file
+        
+        Args:
+            object_name (str): Object name in MinIO (uuid/filename format)
+            
+        Returns:
+            Dict: Pre-signed preview URL and metadata
+        """
+        try:
+            # Extract filename for content type detection
+            filename = object_name.split('/')[-1] if '/' in object_name else object_name
+            
+            # Import here to avoid circular imports
+            from grisera.file.file_validation import FileValidator
+            validator = FileValidator()
+            content_type = validator.get_content_type(filename)
+            
+            if not validator.is_previewable(content_type):
+                response.status_code = 400
+                return {"error": "Preview not available for this file type"}
+            
+            preview_info = self.minio_client.generate_preview_url(
+                object_name, 
+                content_type
+            )
+            
+            response.status_code = 200
+            return preview_info
+        except Exception as e:
+            response.status_code = 500
+            return {"error": f"Failed to generate preview URL: {str(e)}"}
 
     @router.post("/time_series", tags=["time series"], response_model=TimeSeriesOut)
     async def create_time_series(self, time_series: TimeSeriesIn, response: Response, dataset_id: Union[int, str]):
@@ -118,6 +188,31 @@ class TimeSeriesRouter:
         """
 
         get_response = self.time_series_service.get_time_series_nodes(dataset_id, request.query_params)
+
+        # add links from hateoas
+        get_response.links = get_links(router)
+
+        return get_response
+
+    @router.get("/time_series/detailed", tags=["time series"], response_model=DetailedTimeSeriesNodesOut)
+    async def get_time_series_detailed(self, response: Response, dataset_id: Union[int, str],
+                                       activity_execution_id: str,
+                                       participant_id: str):
+        """
+        Get time series with full details (observable informations, measures, etc.) from database.
+        
+        This endpoint is optimized for frontend use - returns detailed time series data
+        with all related entities included, filtered by activity execution and participant.
+        
+        Args:
+            dataset_id: Name of dataset
+            activity_execution_id: Filter by activity execution id (required)
+            participant_id: Filter by participant id (required)
+        """
+
+        get_response = self.time_series_service.get_time_series_detailed(
+            dataset_id, activity_execution_id, participant_id
+        )
 
         # add links from hateoas
         get_response.links = get_links(router)
