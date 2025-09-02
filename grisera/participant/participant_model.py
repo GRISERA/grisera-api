@@ -33,7 +33,6 @@ class ParticipantIn(ImportableModel):
         date_of_birth (Optional[date]): Date of birth of participant
         sex (Optional[str]): Sex of participant
         disorder (Optional[str]): Type of disorder
-        additional_properties (Optional[List[PropertyIn]]): Additional properties for participant
     """
 
     name: Optional[str]
