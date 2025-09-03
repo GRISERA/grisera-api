@@ -38,7 +38,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.THIS_GITHUB_TOKEN }}
         DEFAULT_BRANCH: ${{ github.ref_name }}
         DEFAULT_BUMP: patch
-        WITH_V: false
+        WITH_V: true
     - name: Build and publish
       env:
         TWINE_USERNAME: __token__
