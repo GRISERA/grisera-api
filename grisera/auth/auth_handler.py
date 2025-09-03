@@ -43,19 +43,15 @@ def construct_pem_key(key):
 
 def decode_jwt(token: str) -> dict:
     try:
-        # Get the unverified headers to extract the Key ID (kid)
         unverified_header = jwt.get_unverified_header(token)
         kid = unverified_header.get("kid")
         if not kid:
             raise ValueError("Token header missing 'kid'")
 
-        # Fetch the public key using the kid
         key = get_key_by_kid(kid)
 
-        # Construct the public key
         public_key = construct_pem_key(key)
 
-        # Decode and validate the token
         decoded_token = jwt.decode(
             token,
             public_key,
@@ -64,12 +60,10 @@ def decode_jwt(token: str) -> dict:
             issuer=ISSUER,
         )
 
-        # Additional expiration check
         if decoded_token["exp"] < time.time():
             raise ValueError("Token has expired")
 
         return decoded_token
     except Exception as e:
-        # Log the error or handle as needed
         print(f"Token verification failed: {e}")
         return None
