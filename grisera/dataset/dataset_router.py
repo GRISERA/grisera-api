@@ -10,7 +10,7 @@ from grisera.channel.channel_model import ChannelIn
 from grisera.channel.channel_model import Types as channel_types
 from grisera.dataset.dataset_model import DatasetOut, DatasetsOut, DatasetIn
 from grisera.helpers.hateoas import get_links
-from grisera.helpers.helpers import check_dataset_permission
+from grisera.helpers.helpers import check_dataset_permission, get_permissions
 from grisera.life_activity.life_activity_model import LifeActivity as life_activity_types
 from grisera.measure_name.measure_name_model import MeasureName as measure_name_types, MeasureNameIn
 from grisera.measure.measure_model import Measure as measure_type, MeasureIn
@@ -103,7 +103,9 @@ class DatasetRouter:
         Get all datasets
         """
         dataset_ids = []
-        for permission in token['permissions']:
+        user_id = token['sub']
+        permissions = get_permissions(user_id)
+        for permission in permissions:
             dataset_ids.append(str(permission['datasetId']))
         get_response = self.dataset_service.get_datasets(dataset_ids)
         if get_response.errors is not None:

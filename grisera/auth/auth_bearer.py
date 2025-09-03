@@ -1,7 +1,7 @@
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from grisera.auth.auth_handler import decodeJWT, verify_jwt
+from grisera.auth.auth_handler import decode_jwt, verify_jwt
 
 
 class JWTBearer(HTTPBearer):
@@ -15,6 +15,6 @@ class JWTBearer(HTTPBearer):
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
             if not verify_jwt(credentials.credentials):
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
-            return decodeJWT(credentials.credentials)
+            return decode_jwt(credentials.credentials)
         else:
             raise HTTPException(status_code=403, detail="Invalid authorization code.")

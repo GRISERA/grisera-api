@@ -1,16 +1,8 @@
-# This workflow will upload a Python Package using Twine when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Upload Python Package
 
 on:
   push:
-    branches: [ "development_1.x" ]
+    branches: [ "development_2.1" ]
 
 permissions:
   contents: read
@@ -25,6 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
+        fetch-depth: 0
         python-version: '3.x'
     - name: Install dependencies
       run: |
@@ -37,8 +30,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.THIS_GITHUB_TOKEN }}
         DEFAULT_BRANCH: ${{ github.ref_name }}
-        DEFAULT_BUMP: minor
-        WITH_V: false
+        DEFAULT_BUMP: patch
+        WITH_V: true
     - name: Build and publish
       env:
         TWINE_USERNAME: __token__
