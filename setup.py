@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 # VERSION = '0.0.39.6'
-VERSION = 'dev'
+VERSION = '0.0.40.dev0'
 DESCRIPTION = 'Grisera-api package'
 LONG_DESCRIPTION = 'Graph Representation Integrating Signals for Emotion Recognition and Analysis (GRISERA) framework provides a persistent model for storing integrated signals and methods for its creation.'
 
 # Setting up
 setup(
-    name="grisera2",
+    name="grisera",
     version=VERSION,
     author="",
     author_email="",
@@ -24,7 +24,7 @@ setup(
         'starlette~=0.26.1',
         'pyjwt',
         'cryptography~=44.0.0',
-        'setuptools~=75.6.0'
+        'setuptools~=75.6.0',
         'minio~=7.1.0',
     ],
     classifiers=[
