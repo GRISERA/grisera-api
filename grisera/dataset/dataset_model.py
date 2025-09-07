@@ -14,7 +14,6 @@ class DatasetIn(BaseModel):
         Attributes:
             name (Optional[str]): Name of the dataset given by user
             creator (Optional[str]): Creator of the dataset given by user
-            rights (Optional[str]): Rights set to the dataset given by user
             date (Optional[date]): Date of the dataset given by user
             description (Optional[date]): Description of the dataset given by user
             additional_properties (Optional[List[PropertyIn]]): Additional properties for dataset
@@ -22,7 +21,6 @@ class DatasetIn(BaseModel):
 
     name: Optional[str]
     creator: Optional[str]
-    rights: Optional[str]
     date: Optional[date]
     description: Optional[str]
     additional_properties: Optional[List[PropertyIn]]
