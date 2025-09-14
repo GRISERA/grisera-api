@@ -110,8 +110,6 @@ class DatasetRouter:
         get_response = self.dataset_service.get_datasets(dataset_ids)
         if get_response.errors is not None:
             response.status_code = 422
-        for dataset in get_response.datasets:
-            dataset.rights = next(p for p in permissions if p['datasetId'] == dataset.id)
 
         get_response.links = get_links(router)
 
