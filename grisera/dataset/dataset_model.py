@@ -34,8 +34,10 @@ class BasicDatasetOut(DatasetIn):
 
         Attributes:
             id (Optional[int | str]): Id of dataset returned from api
+            rights (Optional[str]): Rights set to the dataset given by user
     """
     id: Optional[Union[int, str]]
+    rights: Optional[str]
 
 
 class DatasetOut(BasicDatasetOut, BaseModelOut):
