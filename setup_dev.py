@@ -35,6 +35,8 @@ setup(
         'fastapi-utils',
         'pydantic~=1.10.6',
         'starlette~=0.26.1',
+        'cryptography~=44.0.0',
+        'setuptools~=75.6.0',
         'pyjwt'
     ],
     classifiers=[
