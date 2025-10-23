@@ -19,6 +19,7 @@ class DatasetIn(ImportableModel):
             rights (Optional[str]): Rights set to the dataset given by user
             date (Optional[date]): Date of the dataset given by user
             description (Optional[date]): Description of the dataset given by user
+            create_default_entities (Optional[bool]): Whether to create default entities (channels, modalities, life activities, measures)
 
             additional_properties (Optional[List[PropertyIn]]): Additional properties for dataset
     """
@@ -28,6 +29,7 @@ class DatasetIn(ImportableModel):
     rights: Optional[str]
     date: Optional[date]
     description: Optional[str]
+    create_default_entities: Optional[bool] = True
 
     additional_properties: Optional[List[PropertyIn]]
 

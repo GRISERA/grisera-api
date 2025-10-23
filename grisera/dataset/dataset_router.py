@@ -59,27 +59,29 @@ class DatasetRouter:
         # wait for the dataset to be created
         time.sleep(0.5)
 
-        # create channels nodes for the dataset
-        for channel_type in channel_types:
-            create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value[0], description=channel_type.value[1]), create_dataset_response.id)
-
-        # create modalities nodes for the dataset
-        for modality_type in modality_types:
-            create_modality_response = self.modality_service.save_modality(ModalityIn(modality=modality_type.value), create_dataset_response.id)
-
-        # create life activities nodes for the dataset
-        for life_activity_type in life_activity_types:
-            create_life_activity_response = self.life_activity_service.save_life_activity(LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.id)
-
-        # create arrangement nodes for the dataset
+        # Always create arrangement nodes for the dataset
         for arrangement_type in arrangement_types:
             create_arrangement_response = self.arrangement_service.save_arrangement(ArrangementIn(arrangement_type=arrangement_type.value[0], arrangement_distance=arrangement_type.value[1]), create_dataset_response.id)
 
-        # create measures and measure names nodes for the dataset
-        for measure_name_type in measure_name_types:
-            create_measure_name_response = self.measure_name_service.save_measure_name(MeasureNameIn(name=measure_name_type.value[0], type=measure_name_type.value[1]), create_dataset_response.id)
-            measure = measure_type[measure_name_type.name]
-            create_measure_response = self.measure_service.save_measure(MeasureIn(datatype=measure.value[1], range=measure.value[2], unit=measure.value[3], values=measure.value[4], measure_name_id=create_measure_name_response.id), create_dataset_response.id)
+        # Only create other entities if flag is True
+        if getattr(dataset, 'create_default_entities', True):
+            # create channels nodes for the dataset
+            for channel_type in channel_types:
+                create_channel_response = self.channel_service.save_channel(ChannelIn(type=channel_type.value[0], description=channel_type.value[1]), create_dataset_response.id)
+
+            # create modalities nodes for the dataset
+            for modality_type in modality_types:
+                create_modality_response = self.modality_service.save_modality(ModalityIn(modality=modality_type.value), create_dataset_response.id)
+
+            # create life activities nodes for the dataset
+            for life_activity_type in life_activity_types:
+                create_life_activity_response = self.life_activity_service.save_life_activity(LifeActivityIn(life_activity=life_activity_type.value), create_dataset_response.id)
+
+            # create measures and measure names nodes for the dataset
+            for measure_name_type in measure_name_types:
+                create_measure_name_response = self.measure_name_service.save_measure_name(MeasureNameIn(name=measure_name_type.value[0], type=measure_name_type.value[1]), create_dataset_response.id)
+                measure = measure_type[measure_name_type.name]
+                create_measure_response = self.measure_service.save_measure(MeasureIn(datatype=measure.value[1], range=measure.value[2], unit=measure.value[3], values=measure.value[4], measure_name_id=create_measure_name_response.id), create_dataset_response.id)
 
         return create_dataset_response
 
