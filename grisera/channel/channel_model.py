@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from grisera.models.base_model_out import BaseModelOut
 from grisera.models.importable_model import ImportableModel
+from grisera.property.property_model import PropertyIn
 
 
 class Types(tuple, Enum):
@@ -46,6 +47,7 @@ class ChannelIn(ImportableModel):
 
     type: str
     description: str
+    additional_properties: Optional[List[PropertyIn]]
 
 
 class BasicChannelOut(ChannelIn):
